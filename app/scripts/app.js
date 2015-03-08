@@ -15,7 +15,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'pouchdb'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -26,6 +27,10 @@ angular
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      })
+      .when('/listening/new', {
+        templateUrl: 'views/listenings/new.html',
+        controller: 'NewListeningCtrl'
       })
       .otherwise({
         redirectTo: '/'

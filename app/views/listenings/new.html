@@ -1,0 +1,29 @@
+<div class="page-title">
+    <h1>Add new Listening</h1>
+</div>
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label for="location">Rough location <small class="text-muted">e.g {{ placeholder() }}</small></label>
+            <input id="location" type="text" ng-model="location" class="form-control">
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <h3>Candidate interested?</h3>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            <button class="btn btn-block btn-success" ng-click="createNew(location)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <button class="btn btn-block btn-danger" ng-click="recordNotInterested(location)"><span class="glyphicon glyphicon-cross"></span> No</button>
+        </div>
+    </div>
+
+</div>
+<pre>{{ db }}</pre>

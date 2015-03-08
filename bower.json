@@ -14,7 +14,7 @@
     "angular-touch": "1.2.16",
     "angular-route": "1.2.16",
     "pouchdb": "~3.3.1",
-    "ngmodal": "*"
+    "angular-pouchdb": "~1.0.2"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
