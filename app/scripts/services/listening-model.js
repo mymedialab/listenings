@@ -1,4 +1,4 @@
-angular.module('listeningsApp').service('localDb', function(pouchDB) {
+angular.module('listeningsApp').service('listeningModel', function(pouchDB) {
     'use strict';
     var db = pouchDB('listenings');
     var self = {};

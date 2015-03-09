@@ -5,8 +5,15 @@
 
     <div class="col-sm-12">
         <div class="form-group">
+            <label for="location">Listening type</small></label>
+            <select class="form-control" ng-options="value.name for value in questionTypes" ng-model="selectedSet" required></select>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="form-group">
             <label for="location">Rough location <small class="text-muted">e.g {{ placeholder() }}</small></label>
-            <input id="location" type="text" ng-model="location" class="form-control">
+            <input id="location" type="text" ng-model="location" class="form-control" required>
         </div>
     </div>
 
@@ -16,14 +23,13 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-block btn-success" ng-click="createNew(location)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+            <button class="btn btn-block btn-success" ng-click="createNew(location, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-block btn-danger" ng-click="recordNotInterested(location)"><span class="glyphicon glyphicon-cross"></span> No</button>
+            <button class="btn btn-block btn-danger" ng-click="recordNotInterested(location, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
         </div>
     </div>
 
 </div>
-<pre>{{ db }}</pre>

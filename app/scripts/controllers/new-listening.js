@@ -7,25 +7,33 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, localDb) {
+angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, listeningModel, questionSets) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
     $scope.placeholder = function() {
         var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
         return ridiculousPlaceholders[rand];
     };
 
-    $scope.recordNotInterested = function(location) {
+    $scope.recordNotInterested = function(location, selectedSet) {
         var rejection = {
             type: 'rejection',
-            location: location
+            location: location,
+            questionSet: selectedSet.name
         };
-        localDb.storeListening(rejection);
+        listeningModel.storeListening(rejection);
     };
-    $scope.createNew = function(location) {
-        $location.redirect('/listening/record/' + location);
+    $scope.createNew = function(location, selectedSet) {
+        $location.redirect('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
     };
 
-    localDb.getAllListenings().then(function(res) {
+    $scope.questionTypes = [];
+    questionSets.listSets().then(function(res) {
+        $scope.questionTypes = res.sets;
+    }).catch(function() {
+        // @todo error handling!
+    });
+
+    listeningModel.getAllListenings().then(function(res) {
         $scope.db = res;
     });
 });
