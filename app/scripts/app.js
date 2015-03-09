@@ -16,7 +16,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'pouchdb'
+    'pouchdb',
+    'ngTagsInput'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -31,6 +32,10 @@ angular
       .when('/listening/new', {
         templateUrl: 'views/listenings/new.html',
         controller: 'NewListeningCtrl'
+      })
+      .when('/listening/record/:location/:set', {
+        templateUrl: 'views/listenings/record.html',
+        controller: 'RecordListeningCtrl'
       })
       .otherwise({
         redirectTo: '/'

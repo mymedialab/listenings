@@ -9,10 +9,8 @@
  */
 angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, listeningModel, questionSets) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
-    $scope.placeholder = function() {
-        var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
-        return ridiculousPlaceholders[rand];
-    };
+    var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
+    $scope.placeholder = ridiculousPlaceholders[rand];
 
     $scope.recordNotInterested = function(location, selectedSet) {
         var rejection = {
@@ -22,8 +20,9 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
         };
         listeningModel.storeListening(rejection);
     };
+
     $scope.createNew = function(location, selectedSet) {
-        $location.redirect('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
+        $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
     };
 
     $scope.questionTypes = [];

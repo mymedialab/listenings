@@ -1,0 +1,27 @@
+<h1>
+    {{ answers.name }} <small>{{ location }}</small>
+</h1>
+<div class="row">
+    <div class="col-md-12 form-group" ng-repeat="(index, question) in answers.questions">
+        <label for="question-{{ index }}">{{ question.question }}</label>
+        <textarea class="form-control" type="text" id="question-{{ index }}" ng-model="question.response" /></textarea>
+    </div>
+
+    <hr>
+
+    <div class="col-md-12 form-group" ng-repeat="(index, tag) in answers.taggable">
+        <label for="tag-{{ index }}">Tag interview: {{ tag.name }}</label>
+        <tags-input ng-model="tag.tagged">
+            <auto-complete source="tag.existing"></auto-complete>
+        </tags-input>
+    </div>
+
+    <hr>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <button class="btn btn-success btn-block" ng-click="save(answers)"><span class="glyphicon glyphicon-save"></span> Save</button>
+        </div>
+    </div>
+</div>
+
+<pre>{{ answers }}</pre>
