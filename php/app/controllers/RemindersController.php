@@ -6,7 +6,7 @@ use \Lang;
 use \Password;
 use \Response;
 
-class RemindersController extends BaseController
+class RemindersController extends Controller
 {
     /**
      * Handle a POST request to remind a user of their password.

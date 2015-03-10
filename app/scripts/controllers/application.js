@@ -7,9 +7,13 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('ApplicationCtrl', function ($scope, $location) {
+angular.module('listeningsApp').controller('ApplicationCtrl', function ($scope, $location, Session) {
+    $scope.user = false;
     $scope.isActive = function (viewLocation) {
          var active = (viewLocation === $location.path());
          return active;
     };
+    $scope.$watch(function() { return Session.user; }, function(newUser) {
+        $scope.user = newUser;
+    });
 });

@@ -1,11 +1,26 @@
-<div class="jumbotron">
+<div class="page-title">
   <h1>Listen and Record</h1>
-  <p class="lead">
-    How to use this app
-  </p>
 </div>
 
-<div class="row marketing">
+<form ng-if="!user" ng-submit="login(username, password)">
+    <div class="form-group">
+      <label>Username</label>
+      <input class="form-control" type="text" ng-model="username" required>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input class="form-control" type="password" ng-model="password" required>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-success btn-block">Login</button>
+    </div>
+</form>
+
+
+<div ng-if="user" class="row marketing">
+  <h2>Help</h2>
   <h2>Add a new listening</h2>
   <ol>
     <li>Click "Add new" from the menu above</li>

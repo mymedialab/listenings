@@ -10,7 +10,7 @@ use \Validator;
 use \View;
 use \User;
 
-class AuthController extends BaseController
+class AuthController extends Controller
 {
     protected $loginStatus;
 

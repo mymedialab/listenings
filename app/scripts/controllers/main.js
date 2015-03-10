@@ -7,6 +7,6 @@
  * # MainCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('MainCtrl', function () {
-
+angular.module('listeningsApp').controller('MainCtrl', function ($scope, AuthService) {
+    $scope.login = AuthService.login;
 });

@@ -8,7 +8,7 @@ use \Response;
 use \Validator;
 use \User;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
     /**
      * Store a newly created resource in storage.
@@ -17,6 +17,11 @@ class UserController extends BaseController
      */
     public function store()
     {
+        $User = Auth::user();
+        if (!$User || !$User->is_admin) {
+            return Response::json([], 401);
+        }
+
         $vars = [
             "name"     => "required",
             "username" => "required",
@@ -52,7 +57,7 @@ class UserController extends BaseController
 
         $available = !User::findBy('username', Input::get('username'))->count();
 
-        // we could determine availability with HTTP response codes like a proper little RESTful provider, but that always
+        // we could determine availability with HTTP response codes like a proper little RESTful provider, but that
         // leads to lazy JS, where server errors === no username available. Normally this would be the opposite.
         return Response::json(['success' => true, 'available' => $available], 200);
     }
