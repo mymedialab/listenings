@@ -1,7 +1,17 @@
 <h1>Administration</h1>
-<div ng-if="isAdmin">
-    <p>YOU ARE ADMIN!</p>
-</div>
+
 <div ng-if="!isAdmin">
-    <p>YOU ARE NOT ADMIN!</p>
+    <p>Permission denied.</p>
+</div>
+
+<div ng-if="isAdmin">
+
+    <div class="form-group">
+        <button class="btn-block btn btn-default" ng-click="redirect('/listening/create')">Create listening type</button>
+    </div>
+    <div class="form-group">
+        <button class="btn-block btn btn-default" ng-click="redirect('/adduser')">Add new user</button>
+    </div>
+
+
 </div>

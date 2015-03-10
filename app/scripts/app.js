@@ -42,6 +42,14 @@ angular
         templateUrl: 'views/admin.html',
         controller: 'AdminCtrl'
       })
+      .when('/adduser', {
+        templateUrl: 'views/add-user.html',
+        controller: 'AddUserCtrl'
+      })
+      .when('/listening/create', {
+        templateUrl: 'views/listenings/create.html',
+        controller: 'CreateListeningCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

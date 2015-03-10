@@ -68,8 +68,10 @@ angular.module('listeningsApp').factory('AuthService', function ($http, $q, Sess
             if (res.user) {
               Session.create(res.user.id, res.user);
               loaded = true;
-              resolve();
             }
+            resolve();
+          }).error(function() {
+            resolve(); // always resolve. Actual state is found by querying the service again after load,.
           });
         });
       }

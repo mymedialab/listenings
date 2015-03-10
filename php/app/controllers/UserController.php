@@ -17,10 +17,10 @@ class UserController extends Controller
      */
     public function store()
     {
-        $User = Auth::user();
-        if (!$User || !$User->is_admin) {
-            return Response::json([], 401);
-        }
+        // $User = Auth::user();
+        // if (!$User || !$User->is_admin) {
+        //     return Response::json([], 401);
+        // }
 
         $vars = [
             "name"     => "required",

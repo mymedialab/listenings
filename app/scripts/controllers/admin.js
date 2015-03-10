@@ -7,11 +7,8 @@
  * # AdminCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('AdminCtrl', function ($scope, AuthService, Session) {
-    $scope.isAdmin = false;
-    AuthService.findOpenSession().then(function() {
-        if (AuthService.isAuthenticated && Session.user.is_admin) { /* jshint ignore:line */
-            $scope.isAdmin = true; /* jshint ignore:line */
-        }
-    });
+angular.module('listeningsApp').controller('AdminCtrl', function ($scope, $location) {
+    $scope.redirect = function(path) {
+        $location.path(path);
+    };
 });
