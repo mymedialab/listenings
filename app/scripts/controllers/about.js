@@ -4,11 +4,8 @@
  * @ngdoc function
  * @name listeningsApp.controller:AboutCtrl
  * @description
- * # AboutCtrl
- * Controller of the listeningsApp
  */
-angular.module('listeningsApp')
-  .controller('AboutCtrl', function ($scope, $http) {
+angular.module('listeningsApp').controller('AboutCtrl', function ($scope, $http) {
 
     function createUnknownError(status) {
       return {

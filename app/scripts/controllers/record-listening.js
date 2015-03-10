@@ -7,7 +7,7 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('RecordListeningCtrl', function ($scope, $routeParams, listeningModel, questionSets) {
+angular.module('listeningsApp').controller('RecordListeningCtrl', function ($scope, $routeParams, $location, ngToast, listeningModel, questionSets) {
     var cloneObj = function(obj) {
         return (obj) ? JSON.parse(JSON.stringify(obj)) : null;
     };
@@ -24,7 +24,13 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
             });
             delete taggable.existing;
         });
-        listeningModel.storeListening(listening);
+
+        listeningModel.storeListening(listening).then(function() {
+            ngToast.create({content:'Saved successfully.', className: 'success'});
+            $location.path('/listening/new');
+        }).catch(function() {
+            ngToast.create({content:'Interview not saved. Please try again.', className: 'danger'});
+        });
     };
 
     questionSets.getQuestions($routeParams.set).then(function(res) {

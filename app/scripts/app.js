@@ -17,7 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'pouchdb',
-    'ngTagsInput'
+    'ngTagsInput',
+    'ngToast'
   ])
   .config(function ($routeProvider) {
     $routeProvider

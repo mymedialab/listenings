@@ -100,7 +100,7 @@ module.exports = function (grunt) {
       },
       proxies: [
         {
-          context: '/api',
+          context: '/',
           host: 'localhost',
           port: '<%= php.options.port %>'
         }
@@ -151,7 +151,7 @@ module.exports = function (grunt) {
         port: 8000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: '127.0.0.1',
-        router: 'api/index.php'
+        router: 'index.php'
       },
       server: {
         options: {
@@ -395,10 +395,10 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>',
           src: [
-            'api/{{config,src,vendor}/**,index.php,.htaccess}',
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
+            '*.php',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'fonts/*'

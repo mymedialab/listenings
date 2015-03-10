@@ -7,7 +7,7 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, listeningModel, questionSets) {
+angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, ngToast, listeningModel, questionSets) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
@@ -29,7 +29,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     questionSets.listSets().then(function(res) {
         $scope.questionTypes = res.sets;
     }).catch(function() {
-        // @todo error handling!
+        ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });
 
     listeningModel.getAllListenings().then(function(res) {

@@ -1,16 +1,21 @@
-angular.module('listeningsApp').service('listeningModel', function(pouchDB) {
+angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q) {
     'use strict';
     var db = pouchDB('listenings');
     var self = {};
 
     self.storeListening = function(details) {
-        db.get('listenings').then(function(doc) {
-            doc.data.push(details);
-            db.put(doc);
-        }).catch(function() {
-            db.put({
-                _id: 'listenings',
-                data: [details]
+        return $q(function(resolve) {
+            db.get('listenings').then(function(doc) {
+                doc.data.push(details);
+                db.put(doc);
+                resolve(doc);
+            }).catch(function() {
+                var doc = {
+                    _id: 'listenings',
+                    data: [details]
+                };
+                db.put();
+                resolve(doc);
             });
         });
     };
