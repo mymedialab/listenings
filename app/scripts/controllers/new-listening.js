@@ -26,8 +26,8 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     };
 
     $scope.questionTypes = [];
-    questionSets.listSets().then(function(res) {
-        $scope.questionTypes = res.sets;
+    questionSets.listSets().then(function(sets) {
+        $scope.questionTypes = sets;
     }).catch(function() {
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });

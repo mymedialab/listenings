@@ -5,20 +5,6 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
     var current = {};
     var sets = [];
 
-    var reset = function() {
-         db.get('sets').then(function(res) {
-            db.put({
-                _id: 'sets',
-                lastUpdated: new Date().getMilliseconds(),
-                _rev: res._rev,
-                sets: [
-                    {name: 'Likes and concerns', questions: ['What like?', 'Were you hugged enough as a child?', 'OO R YA?'], taggable: [{name: 'likes', existing:['this', 'that', 'the other']}]},
-                    {name: 'Some other question set!', questions: ['Why am I here?', 'What do I want from this?', 'Who even asked you anyway?'], taggable: [{name: 'likes', existing:['this', 'that', 'the other']}]},
-                ]
-            });
-        });
-    };
-
     var findQuestionsByName = function(name) {
          var found = sets.filter(function(input) {
             return input.name === name;
@@ -31,6 +17,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
      */
     var updateList = function(newItem) {
         current.sets.push(newItem);
+        current.lastUpdated = new Date().getMilliseconds();
         db.put(current);
     };
 
@@ -47,7 +34,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
                 if (fn && typeof(fn) === 'function') {
                     fn(sets);
                 }
-                resolve();
+                resolve(sets);
                 return;
             }
 
@@ -58,7 +45,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
                     if (fn && typeof(fn) === 'function') {
                         fn(res.sets);
                     }
-                    resolve(res);
+                    resolve(sets);
                 } else {
                     reject(res);
                 }
@@ -93,7 +80,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
 
     self.create = function (details) {
         details.questions = details.questions || [];
-        details.taggables = details.taggables || [];
+        details.taggable = details.taggable || [];
 
         return getList(function() {
             updateList(details);

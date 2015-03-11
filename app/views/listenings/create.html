@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group">
-        <form ng-submit="listening.taggables.push(taggable);taggable=''" class="row">
+        <form ng-submit="listening.taggable.push(taggable);taggable=''" class="row">
 
             <div class="col-md-12">
                 <label>Taggable item</label>
@@ -62,8 +62,8 @@
         </div>
     </div>
 
-    <h3 ng-if="listening.taggables.length">Taggables</h3>
-    <div ng-repeat="taggable in listening.taggables" class="row">
+    <h3 ng-if="listening.taggable.length">Taggables</h3>
+    <div ng-repeat="taggable in listening.taggable" class="row">
         <div class="col-md-8">
             <p>{{ taggable }}</p>
         </div>
