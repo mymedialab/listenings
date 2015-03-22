@@ -18,7 +18,8 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
     var updateList = function(newItem) {
         current.sets.push(newItem);
         current.lastUpdated = new Date().getMilliseconds();
-        db.put(current);
+        console.log('put called');
+        return db.put(current);
     };
 
     /**
@@ -49,7 +50,15 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
                 } else {
                     reject(res);
                 }
-            }).catch(reject);
+            }).catch(function() {
+                // Almost certainly first run
+                current = {
+                    _id: 'sets',
+                    lastUpdated : new Date(),
+                    sets: []
+                };
+                resolve([]);
+            });
         });
     };
 
@@ -82,8 +91,10 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
         details.questions = details.questions || [];
         details.taggable = details.taggable || [];
 
-        return getList(function() {
-            updateList(details);
+        return $q(function(resolve, reject) {
+            getList().then(function() {
+                updateList(details).then(resolve).catch(reject);
+            }).catch(reject);
         });
     };
 

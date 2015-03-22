@@ -15,14 +15,14 @@ angular.module('listeningsApp').controller('CreateListeningCtrl', function ($sco
     };
     $scope.saveListening = function(listening) {
         questionSets.create(listening).then(function() {
-            ngToast.create({content: "New type created", className: 'success'});
+            ngToast.create({content: 'New type created', className: 'success'});
             $scope.listening = {
                 name: '',
                 questions: [],
                 taggable: []
             };
         }).catch(function() {
-            ngToast.create({content: "Creation failed", className: 'danger'});
+            ngToast.create({content: 'Creation failed', className: 'danger'});
         });
     };
 });

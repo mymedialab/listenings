@@ -1,11 +1,10 @@
-'use strict';
-
 /**
  * @ngdoc function
  * @name listeningsApp.controller:AboutCtrl
  * @description
  */
 angular.module('listeningsApp').controller('AboutCtrl', function ($scope, $http) {
+  'use strict';
 
     function createUnknownError(status) {
       return {

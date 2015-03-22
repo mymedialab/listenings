@@ -445,10 +445,10 @@ module.exports = function (grunt) {
         failOnError: true
       },
       phpTest: {
-        command: 'make --directory <%= yeoman.app %>/api test'
+        command: '# make --directory <%= yeoman.app %>/api test'
       },
       phpUpdate: {
-        command: 'make --directory <%= yeoman.app %>/api update'
+        command: '# make --directory <%= yeoman.app %>/api update'
       }
     },
 
@@ -495,7 +495,7 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    // 'karma'
   ]);
 
   grunt.registerTask('build', [
