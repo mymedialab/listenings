@@ -5,8 +5,8 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q) 
 
     self.storeListening = function(details) {
         return $q(function(resolve) {
-            details.recordedAt: new Date().getTime();
-            details.id: 'pending';
+            details.recordedAt = new Date().getTime();
+            details.id = 'pending';
             db.get('listenings').then(function(doc) {
                 doc.data.push(details);
                 db.put(doc);
