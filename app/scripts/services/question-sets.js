@@ -18,7 +18,6 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
     var updateList = function(newItem) {
         current.sets.push(newItem);
         current.lastUpdated = new Date().getMilliseconds();
-        console.log('put called');
         return db.put(current);
     };
 
@@ -88,8 +87,13 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
     };
 
     self.create = function (details) {
+        var reformattedTaggables = [];
         details.questions = details.questions || [];
-        details.taggable = details.taggable || [];
+        (details.taggable || []).forEach(function(taggableName) {
+            reformattedTaggables.push({name: taggableName, existing: []});
+        });
+        details.taggable = reformattedTaggables;
+        details.id = 'pending';
 
         return $q(function(resolve, reject) {
             getList().then(function() {

@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc function
- * @name listenings.controller:ApplicationCtrl
+ * @name listenings.controller:RecordListeningCtrl
  * @description
- * # ApplicationCtrl
+ * # RecordListeningCtrl
  * Controller of the listeningsApp
  */
 angular.module('listeningsApp').controller('RecordListeningCtrl', function ($scope, $routeParams, $location, ngToast, listeningModel, questionSets) {
@@ -34,15 +34,18 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     };
 
     questionSets.getQuestions($routeParams.set).then(function(res) {
-        var reformattedQuestions = [];
+        var reformattedQuestions = [], reformattedTaggables = [];
         $scope.answers = cloneObj(res);
+
         // reformat for the html
-        $scope.answers.taggable.forEach(function(taggable) {
+        $scope.answers.taggable.forEach(function(taggable, index) {
             var reformattedTags = [];
-            taggable.existing.forEach(function(tagText) {
-                reformattedTags.push({text: tagText});
-            });
-            taggable.existing = reformattedTags;
+            if (taggable.existing) {
+                taggable.existing.forEach(function(tagText) {
+                    reformattedTags.push({text: tagText});
+                });
+            }
+            $scope.answers.taggable[index].existing = reformattedTags;
         });
         $scope.answers.questions.forEach(function(question) {
             reformattedQuestions.push({question: question, response: ''});
