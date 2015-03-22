@@ -1,10 +1,10 @@
 <h1>Administration</h1>
 
-<div ng-if="!isAdmin">
+<div ng-if="!isAdmin()">
     <p>Permission denied.</p>
 </div>
 
-<div ng-if="isAdmin">
+<div ng-if="isAdmin()">
 
     <div class="form-group">
         <button class="btn-block btn btn-default" ng-click="redirect('/listening/create')">Create listening type</button>

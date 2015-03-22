@@ -27,9 +27,9 @@
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li ng-class="{active: isActive('/')}"><a ng-href="#/">Home</a></li>
-          <li ng-class="{active: isActive('/listening/new')}"><a ng-href="#/listening/new">New Listening</a></li>
-          <li ng-class="{active: isActive('/admin')}"><a ng-href="#/admin">Admin</a></li>
-          <li><a ng-click="logout()">Logout</a></li>
+          <li ng-if="user" ng-class="{active: isActive('/listening/new')}"><a ng-href="#/listening/new">New Listening</a></li>
+          <li ng-if="user" ng-class="{active: isActive('/admin')}"><a ng-href="#/admin">Admin</a></li>
+          <li ng-if="user"><a ng-click="logout()">Logout</a></li>
         </ul>
         <h3 class="text-muted">listenings</h3>
       </div>

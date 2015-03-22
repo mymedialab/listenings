@@ -20,12 +20,10 @@ angular.module('listeningsApp').controller('ApplicationCtrl', function ($scope, 
     $scope.logout = function() {
         AuthService.logout();
     };
-
-    $scope.isAdmin = false;
+    $scope.isAdmin = function() {
+        return (AuthService.isAuthenticated && Session.user && Session.user.is_admin);
+    };
     AuthService.findOpenSession().then(function() {
         $scope.loading = false;
-        if (AuthService.isAuthenticated && Session.user.is_admin) { /* jshint ignore:line */
-            $scope.isAdmin = true; /* jshint ignore:line */
-        }
     });
 });

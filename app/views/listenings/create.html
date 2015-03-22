@@ -1,10 +1,10 @@
 <h1>Create new listening</h1>
 
-<div ng-if="!isAdmin">
+<div ng-if="!isAdmin()">
     <p>Permission denied.</p>
 </div>
 
-<div ng-if="isAdmin">
+<div ng-if="isAdmin()">
 
     <div class="form-group">
         <label>Listening name</label>
