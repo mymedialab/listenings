@@ -19,6 +19,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
             questionSet: selectedSet.name
         };
         listeningModel.storeListening(rejection);
+        ngToast.create({content:'Rejection noted.', className: 'success'});
     };
 
     $scope.createNew = function(location, selectedSet) {

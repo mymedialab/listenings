@@ -12,8 +12,11 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         return (obj) ? JSON.parse(JSON.stringify(obj)) : null;
     };
     $scope.loading = true;
-    $scope.location = $routeParams.location;
-    $scope.answers = {name: 'Loading'};
+    $scope.answers = {
+        type : 'interview',
+        questionSet : $routeParams.set,
+        location : $routeParams.location
+    };
 
     $scope.save = function(answers) {
         var listening = cloneObj(answers);
@@ -34,23 +37,24 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     };
 
     questionSets.getQuestions($routeParams.set).then(function(res) {
-        var reformattedQuestions = [], reformattedTaggables = [];
-        $scope.answers = cloneObj(res);
+        var reformattedQuestions = [];
+        var question = cloneObj(res);
 
         // reformat for the html
-        $scope.answers.taggable.forEach(function(taggable, index) {
+        question.taggable.forEach(function(taggable) {
             var reformattedTags = [];
             if (taggable.existing) {
                 taggable.existing.forEach(function(tagText) {
                     reformattedTags.push({text: tagText});
                 });
             }
-            $scope.answers.taggable[index].existing = reformattedTags;
+            taggable.existing = reformattedTags;
         });
-        $scope.answers.questions.forEach(function(question) {
+        question.questions.forEach(function(question) {
             reformattedQuestions.push({question: question, response: ''});
         });
 
+        $scope.answers.taggable = question.taggable;
         $scope.answers.questions = reformattedQuestions;
         $scope.loading = false;
     });

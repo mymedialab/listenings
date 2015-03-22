@@ -30,6 +30,10 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/listening/list', {
+        templateUrl: 'views/listenings/list.html',
+        controller: 'ListListeningCtrl'
+      })
       .when('/listening/new', {
         templateUrl: 'views/listenings/new.html',
         controller: 'NewListeningCtrl'

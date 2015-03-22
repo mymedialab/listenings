@@ -16,7 +16,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q) 
                     _id: 'listenings',
                     data: [details]
                 };
-                db.put();
+                db.put(doc);
                 resolve(doc);
             });
         });
