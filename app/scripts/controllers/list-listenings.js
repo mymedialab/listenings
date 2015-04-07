@@ -21,11 +21,15 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     }
     $scope.loading = true;
     listeningModel.getAllListenings().then(function(res) {
-        $scope.listenings = res.data;
-        $scope.listenings.forEach(function(listening) {
-            listening.date = formatDate(listening.recordedAt);
-            listening.accepted = (listening.type.toLowerCase() === 'rejection') ? 'N' : 'Y';
-            listening.status = (listening.mysqlId && parseInt(listening.mysqlId, 10) > 0) ? 'Stored (' + listening.mysqlId + ')' : 'pending';
+        $scope.listenings = [];
+        console.debug(res.rows);
+        res.rows.forEach(function(row) {
+            var listening = JSON.parse(JSON.stringify(row.doc));
+            listening.date = formatDate(row.doc.recordedAt);
+            listening.accepted = (row.doc.type.toLowerCase() === 'rejection') ? 'N' : 'Y';
+            listening.status = (row.doc.mysqlId && parseInt(row.doc.mysqlId, 10) > 0) ? 'Stored (' + listening.doc.mysqlId + ')' : 'pending';
+
+            $scope.listenings.push(listening);
         });
         $scope.loading = false;
     }).catch(function() {

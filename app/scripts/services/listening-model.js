@@ -6,24 +6,17 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q) 
     self.storeListening = function(details) {
         return $q(function(resolve) {
             details.recordedAt = new Date().getTime();
-            details.id = 'pending';
-            db.get('listenings').then(function(doc) {
-                doc.data.push(details);
-                db.put(doc);
-                resolve(doc);
-            }).catch(function() {
-                var doc = {
-                    _id: 'listenings',
-                    data: [details]
-                };
-                db.put(doc);
+            details.id  = 'pending';
+            details._id = new Date().toISOString();
+
+            db.put(details).then(function(doc) {
                 resolve(doc);
             });
         });
     };
 
     self.getAllListenings = function () {
-        return db.get('listenings');
+        return db.allDocs({include_docs: true});
     };
 
     return self;
