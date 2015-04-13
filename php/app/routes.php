@@ -25,4 +25,8 @@ Route::post('api/user/available', 'UserController@available');
 Route::post('api/user/changepassword', 'UserController@changePassword');
 Route::resource('api/user', 'UserController', ['only' => ['store', 'update', 'show']]);
 
-Route::resource('api/listenings', 'ListeningsController');
+Route::group(array('before' => 'auth'), function() {
+  Route::resource('api/interviews', 'InterviewsController');
+  Route::resource('api/questionnaires', 'QuestionnaireController');
+  Route::resource('api/questions', 'QuestionController');
+});

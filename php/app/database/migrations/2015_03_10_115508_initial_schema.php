@@ -38,7 +38,7 @@ class InitialSchema extends Migration
 	        $table->string('name');
 	        $table->string('email');
 	        $table->string('password');
-            $table->boolean('is_admin');
+          $table->boolean('is_admin');
 	        $table->string('remember_token', 255)->nullable();
 	        $table->timestamps();
         });
@@ -108,7 +108,7 @@ class InitialSchema extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('users');
+		Schema::drop('user');
 		Schema::drop('question');
 		Schema::drop('tag');
 		Schema::drop('tag_list');

@@ -7,7 +7,7 @@
  * # UserService
  * Factory in the listeningsApp.
  */
-angular.module('listeningsApp').factory('UserService', function ($rootScope, $http, ngToast) {
+angular.module('listeningsApp').factory('UserService', function ($http, ngToast) {
     var self = {};
 
     self.addNew = function(credentials) {

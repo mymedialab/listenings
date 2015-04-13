@@ -1,9 +1,19 @@
-angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
+/* In the api this is a questionnaire? */
+angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $http) {
     'use strict';
     var db = pouchDB('questions');
     var self = {};
     var current = {};
     var sets = [];
+    var questionnaires = [];
+
+    self.init = function() {
+        $http.get('/api/questionnaires').success(function(data) {
+            questionnaires = data;
+        }).error(function(data) {
+            questionnaires = [];
+        });
+    };
 
     var findQuestionsByName = function(name) {
          var found = sets.filter(function(input) {
@@ -12,25 +22,12 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
         return found.length ? found[0] : false;
     };
 
-    /**
-     * Only call once results are loaded.
-     */
-    var updateList = function(newItem) {
-        current.sets.push(newItem);
-        current.lastUpdated = new Date().getMilliseconds();
-        return db.put(current);
-    };
+    // @todo attempt to pull down from server and over-write current.
 
-    /**
-     *
-     * @param  {Function} fn Function to execute on success
-     * @return promise
-     */
-    var getList = function(fn) {
-
+    self.listSets = function(fn) {
         return $q(function(resolve, reject) {
 
-             if (sets.length) {
+            if (sets.length) {
                 if (fn && typeof(fn) === 'function') {
                     fn(sets);
                 }
@@ -38,70 +35,47 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q) {
                 return;
             }
 
-            db.get('sets').then(function(res) {
-                if (res.sets) {
-                    current = res;
-                    sets = res.sets;
-                    if (fn && typeof(fn) === 'function') {
-                        fn(res.sets);
-                    }
-                    resolve(sets);
-                } else {
-                    reject(res);
+            db.allDocs({include_docs: true}).then(function(res) {
+                var sets = [];
+                res.rows.forEach(function(row) { sets.push(row.doc); });
+
+                console.log('getlist', sets);
+
+                if (fn && typeof(fn) === 'function') {
+                    fn(sets);
                 }
+                resolve(sets);
             }).catch(function() {
-                // Almost certainly first run
-                current = {
-                    _id: 'sets',
-                    lastUpdated : new Date(),
-                    sets: []
-                };
                 resolve([]);
             });
         });
     };
 
-    // @todo attempt to pull down from server and over-write current.
-
-    self.listSets = function() {
-        return getList();
-    };
-
     self.getQuestions = function (setName) {
+        console.log('looking up', setName);
 
-        return $q(function(resolve, reject) {
-            if (sets.length) {
-                resolve(findQuestionsByName(setName));
-                return;
-            }
-            db.get('sets').then(function(res) {
-                if (res.sets) {
-                    current = res;
-                    sets = res.sets;
-                    resolve(findQuestionsByName(setName));
-                } else {
-                    reject(res);
-                }
-            }).catch(reject);
-        });
+        return db.get(setName);
     };
 
     self.create = function (details) {
         var reformattedTaggables = [];
+
         details.questions = details.questions || [];
+
         (details.taggable || []).forEach(function(taggableName) {
             reformattedTaggables.push({name: taggableName, existing: []});
         });
+
+        console.log(details);
+
         details.taggable = reformattedTaggables;
-        details.id = 'pending';
+        details.id       = 'pending';
+        details._id      = details.name;
 
         return $q(function(resolve, reject) {
-            getList().then(function() {
-                updateList(details).then(resolve).catch(reject);
-            }).catch(reject);
+            db.put(details).then(resolve).catch(reject);
         });
     };
-
 
     return self;
 });

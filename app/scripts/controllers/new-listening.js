@@ -12,6 +12,8 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
 
+    console.log('wtf');
+
     $scope.recordNotInterested = function(location, selectedSet) {
         var rejection = {
             type: 'rejection',
@@ -26,10 +28,13 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
         $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
     };
 
+    // questionTypes is the questionnaire
     $scope.questionTypes = [];
     questionSets.listSets().then(function(sets) {
+        console.log('newlistening', sets);
         $scope.questionTypes = sets;
-    }).catch(function() {
+    }).catch(function(e) {
+        console.log('error', e);
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });
 

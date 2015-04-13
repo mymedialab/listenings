@@ -1,5 +1,5 @@
 /* In the API a listening is an interview */
-angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, $http) {
+angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, $http, Session) {
     'use strict';
     var db = pouchDB('listenings');
     var self = {};
@@ -24,33 +24,22 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
      * work out what needs syncing and make it so
      */
     self.sync = function() {
+        // send what we've got to the server
         db.allDocs({ include_docs: true }).then(function(res) {
-            console.log(res);
-            // sync pending
-            res.rows.forEach(function(row, index) {
-                if (row.doc.id != 'pending') {
+            res.rows.forEach(function(row) {
+                var doc = row.doc;
+
+                if (doc.id !== 'pending') {
                     return;
                 }
 
-                $http.post('/api/listenings', { set: row.doc }).
-                    success(function(data) {
-                        row.doc.id = data.mysql_id; // assign the saved id.
-                      }).
-                    error(function(data, status) {
-                        var statusType = status / 100;
-
-                        if (statusType === 5) {
-                            console.log('server error on sync');
-                            return;
-                        }
-
-                        if (statusType === 4) {
-                            console.log('client error on sync');
-                            return;
-                        }
-
-                        console.log('unknown error on sync');
+                $http.post('/api/interviews', doc).success(function(data) {
+                    Session
+                    doc.id   = data.id;
+                    db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
+                        console.log('failed to save', doc.id, ',', err);
                     });
+                });
             });
         });
     };

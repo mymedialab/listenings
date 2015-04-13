@@ -38,11 +38,15 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         listeningModel.sync();
     };
 
+    console.log('questionssss!>');
+
     questionSets.getQuestions($routeParams.set).then(function(res) {
         var reformattedQuestions = [];
         var question = cloneObj(res);
 
         // reformat for the html
+        console.log('questionssss', res);
+
         question.taggable.forEach(function(taggable) {
             var reformattedTags = [];
             if (taggable.existing) {
@@ -51,13 +55,15 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
                 });
             }
             taggable.existing = reformattedTags;
+            console.log('tags', taggable);
         });
         question.questions.forEach(function(question) {
+            console.log('question', question);
             reformattedQuestions.push({question: question, response: ''});
         });
 
         $scope.answers.taggable = question.taggable;
         $scope.answers.questions = reformattedQuestions;
         $scope.loading = false;
-    });
+    }).catch(function(a) {console.log('fuicked', a)});
 });

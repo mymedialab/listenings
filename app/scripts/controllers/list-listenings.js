@@ -22,7 +22,9 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     $scope.loading = true;
     listeningModel.getAllListenings().then(function(res) {
         $scope.listenings = [];
-        console.debug(res.rows);
+
+        console.log('list', res.rows);
+
         res.rows.forEach(function(row) {
             var listening = JSON.parse(JSON.stringify(row.doc));
             listening.date = formatDate(row.doc.recordedAt);
