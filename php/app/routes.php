@@ -24,3 +24,5 @@ Route::controller('api/password', 'RemindersController');
 Route::post('api/user/available', 'UserController@available');
 Route::post('api/user/changepassword', 'UserController@changePassword');
 Route::resource('api/user', 'UserController', ['only' => ['store', 'update', 'show']]);
+
+Route::resource('api/listenings', 'ListeningsController');

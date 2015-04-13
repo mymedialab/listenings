@@ -34,6 +34,8 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         }).catch(function() {
             ngToast.create({content:'Interview not saved. Please try again.', className: 'danger'});
         });
+
+        listeningModel.sync();
     };
 
     questionSets.getQuestions($routeParams.set).then(function(res) {
