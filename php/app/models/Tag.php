@@ -7,7 +7,7 @@
 class Tag extends \Eloquent {
   public $timestamps = false;
   protected $table = 'tag';
-  protected $fillable = ['name'];
+  protected $fillable = ['name', 'tag_list_id'];
 
   public function tagList()
   {

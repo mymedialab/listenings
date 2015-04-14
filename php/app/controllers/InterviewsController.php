@@ -61,8 +61,22 @@ class InterviewsController extends Controller {
 				]);
 			}
 		}
+		if (Input::has('taggable') && $interview->type === 'interview') {
+			foreach (Input::get('taggable') as $list) {
+				if (isset($list['id'])) {
+					$this->saveTagsToQuestionnaire($list);
+				}
+				$TagList = new TagList;
+				$TagList->name = $list['name'];
 
-		// @todo save any tags to this interview, and to the questionaire
+				$interview->tagLists()->save($TagList);
+
+				foreach ($list['tagged'] as $tag) {
+					$TagList->tags()->save(Tag::create(['name' => $tag, 'tag_list_id' => $TagList->id]));
+				}
+			}
+		}
+
 
 		$interview->push();
 
@@ -117,5 +131,29 @@ class InterviewsController extends Controller {
 		//
 	}
 
+
+	/**
+	 * Could be cleverer here..? We're basically ending up with a BIG list of tags
+	 * for the questionnaire, and lots of little lists for the interviews. The questionnaire
+	 * *should* be able to follow it's relationships through interviews to tags I reckon?
+	 *
+	 * @param  array  $list
+	 */
+	protected function saveTagsToQuestionnaire(array $list)
+	{
+		$TagList = TagList::findOrNew($list['id']);
+		$TagList->name = $TagList->name ? $TagList->name : $list['name'];
+		foreach ($list['tagged'] as $tag) {
+			foreach ($TagList->tags as $Existing) {
+				if ($Existing->name === $tag) {
+					continue 2; // don't duplicate tags
+				}
+			}
+
+			$TagList->tags()->save(Tag::create(['name' => $tag, 'tag_list_id' => $TagList->id]));
+		}
+
+		$TagList->save();
+	}
 
 }

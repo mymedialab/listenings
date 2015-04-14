@@ -97,7 +97,16 @@ class QuestionnaireController extends Controller {
 			$questionnaire = $Questionnaire->toArray();
 
 			$questionnaire['taggable'] = array_map(function($tagList) {
-				return ['id' => $tagList['id'], 'name' => $tagList['name'], 'existing' => $tagList['tags']];
+				return [
+					'id' => $tagList['id'],
+					'name' => $tagList['name'],
+					'existing' => array_map(
+						function($item) {
+							return $item['name'];
+						},
+						$tagList['tags']
+					)
+				];
 			}, $questionnaire['tag_lists']);
 
 			$questionnaire['questions'] = array_map(function($question) {
