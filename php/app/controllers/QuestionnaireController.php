@@ -9,7 +9,8 @@ class QuestionnaireController extends Controller {
 	 */
 	public function index()
 	{
-		return Response::json(Questionnaire::with('questions')->get(), 200);
+		$Questionnaire = Questionnaire::with('questions', 'tagLists', 'tagLists.tags')->get();
+		return Response::json($this->reformatTagsAndQuestions($Questionnaire), 200);
 	}
 
 	/**
@@ -83,5 +84,31 @@ class QuestionnaireController extends Controller {
 		$questionnaire->name = Input::get('name');
 
 		return Response::json($questionnaire, 200);
+	}
+
+	/**
+	 * Need to rename tag_lists to taggable for the js
+	 */
+	protected function reformatTagsAndQuestions($Questionnaires)
+	{
+		$questionnaires = [];
+
+		foreach ($Questionnaires as $Questionnaire) {
+			$questionnaire = $Questionnaire->toArray();
+
+			$questionnaire['taggable'] = array_map(function($tagList) {
+				return ['id' => $tagList['id'], 'name' => $tagList['name'], 'existing' => $tagList['tags']];
+			}, $questionnaire['tag_lists']);
+
+			$questionnaire['questions'] = array_map(function($question) {
+				return $question['question'];
+			}, $questionnaire['questions']);
+
+			unset($questionnaire['tag_lists']);
+
+			$questionnaires[] = $questionnaire;
+		}
+
+		return $questionnaires;
 	}
 }
