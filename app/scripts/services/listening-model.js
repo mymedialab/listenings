@@ -22,7 +22,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
     };
 
     self.getAllListenings = function () {
-        return db.allDocs({ include_docs: true });
+        return db.allDocs({ include_docs: true }); // jshint ignore:line
     };
 
     /**
@@ -31,12 +31,12 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
     self.sync = function() {
         $http.get('/api/interviews').success(function(data) {
             data.forEach(function(row) {
-                var sync = false, id, doc = {};
+                var id, doc = {};
                 var date = new Date(row.date);
                 // adjust the date for timezone, this ensures that times match the stored (UTC) _id values
                 var dateUtc = Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 1000);
 
-                id = row.interviewer_id + '/' + dateUtc;
+                id = row.interviewer_id + '/' + dateUtc; // jshint ignore:line
 
                 doc = {
                     _id: id,
@@ -46,8 +46,8 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                     location: row.location,
                     questions: row.responses,
                     recordedAt: date,
-                    last_updated: row.updated_at
-                }
+                    last_updated: row.updated_at // jshint ignore:line
+                };
 
                 db.put(doc);
             });
@@ -56,7 +56,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
         });
 
         // send what we've got to the server
-        return db.allDocs({ include_docs: true }).then(function(res) {
+        return db.allDocs({ include_docs: true }).then(function(res) {  // jshint ignore:line
             res.rows.forEach(function(row) {
                 var doc = row.doc;
 
@@ -66,7 +66,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
 
                 $http.post('/api/interviews', doc).success(function(data) {
                     doc.id          = data.id;
-                    doc.last_synced = data.updated_at;
+                    doc.last_synced = data.updated_at; // jshint ignore:line
 
                     db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
                         // I'm pretty sure _rev doesn't work this way...
@@ -75,7 +75,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                 }); // todo: error is ignored because id will remain 'pending', maybe handle it better
             });
 
-            return db.allDocs({ include_docs: true });
+            return db.allDocs({ include_docs: true }); // jshint ignore:line
         });
     };
 

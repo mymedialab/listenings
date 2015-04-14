@@ -34,7 +34,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     $scope.questionTypes = [];
     questionSets.listSets().then(function(res) {
         $scope.questionTypes = res.data;
-    }).catch(function(e) {
+    }).catch(function() {
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });
 });

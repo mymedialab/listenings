@@ -21,7 +21,7 @@ angular.module('listeningsApp').controller('ApplicationCtrl', function ($scope, 
         AuthService.logout();
     };
     $scope.isAdmin = function() {
-        return (AuthService.isAuthenticated && Session.user && Session.user.is_admin);
+        return (AuthService.isAuthenticated && Session.user && Session.user.is_admin); // jshint ignore:line
     };
     AuthService.findOpenSession().then(function() {
         $scope.loading = false;

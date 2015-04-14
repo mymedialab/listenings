@@ -3,8 +3,6 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
     'use strict';
     var db = pouchDB('questionnaires');
     var self = {};
-    var current = {};
-    var questionnaires = [];
 
     var download = function() {
         return $http.get('/api/questionnaires').success(function(data) {
@@ -13,15 +11,15 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
             data.forEach(function(row) {
                 row._id = row.name;
                 docs.push(row);
-            })
+            });
 
-            return db.bulkDocs(docs).then(function() {return db.allDocs({include_docs: true})});
-        }).error(function(data) {
-            return db.allDocs({include_docs: true});
+            return db.bulkDocs(docs).then(function() {
+                return db.allDocs({include_docs: true}); // jshint ignore:line
+            });
+        }).error(function() {
+            return db.allDocs({include_docs: true}); // jshint ignore:line
         });
     };
-
-    // @todo attempt to pull down from server and over-write current.
 
     self.listSets = function() {
         return download();

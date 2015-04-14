@@ -9,7 +9,7 @@
  */
 angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel) {
     function padZeros(str) {
-        str = "" + str; // coerce to string, because Javascript.
+        str = '' + str; // coerce to string, because Javascript.
         while (str.length < 2) {
             str = '0' + str;
         }

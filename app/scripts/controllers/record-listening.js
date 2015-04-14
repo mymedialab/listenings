@@ -21,12 +21,14 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     $scope.save = function(answers) {
         var listening = cloneObj(answers);
         // reformat for the model, reduce the array of objects down to an array of strings
-        listening.taggable && listening.taggable.forEach(function(taggable) {
-            taggable.tagged = taggable.tagged.map(function(obj) {
-                return obj.text;
+        if (listening.taggable) {
+            listening.taggable.forEach(function(taggable) {
+                taggable.tagged = taggable.tagged.map(function(obj) {
+                    return obj.text;
+                });
+                delete taggable.existing;
             });
-            delete taggable.existing;
-        });
+        }
 
         listeningModel.storeListening(listening).then(function() {
             ngToast.create({content:'Saved successfully.', className: 'success'});
@@ -43,19 +45,23 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         var questionnaire = cloneObj(res);
 
         // reformat for the html
-        questionnaire.taggable && questionnaire.taggable.forEach(function(taggable) {
-            var reformattedTags = [];
-            if (taggable.existing) {
-                taggable.existing.forEach(function(tagText) {
-                    reformattedTags.push({text: tagText});
-                });
-            }
-            taggable.existing = reformattedTags;
-        });
+        if (questionnaire.taggable) {
+            questionnaire.taggable.forEach(function(taggable) {
+                var reformattedTags = [];
+                if (taggable.existing) {
+                    taggable.existing.forEach(function(tagText) {
+                        reformattedTags.push({text: tagText});
+                    });
+                }
+                taggable.existing = reformattedTags;
+            });
+        }
 
-        questionnaire.questions && questionnaire.questions.forEach(function(question) {
-            reformattedQuestions.push({question: question, answer: ''});
-        });
+        if (questionnaire.questions) {
+            questionnaire.questions.forEach(function(question) {
+                reformattedQuestions.push({question: question, answer: ''});
+            });
+        }
 
         $scope.answers.taggable = questionnaire.taggable;
         $scope.answers.questions = reformattedQuestions;
