@@ -17,7 +17,6 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
 
             return db.bulkDocs(docs).then(function() {return db.allDocs({include_docs: true})});
         }).error(function(data) {
-            console.log('failed to download thingies')
             return db.allDocs({include_docs: true});
         });
     };
@@ -41,8 +40,6 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
             reformattedTaggables.push({name: taggableName, existing: []});
         });
 
-        console.log(details);
-
         details.taggable = reformattedTaggables;
         details.id       = 'pending';
         details._id      = details.name;
@@ -52,11 +49,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
         }).then(function(doc) {
             $http.post('/api/questionnaires', details).success(function(data) {
                 doc.id = data.id;
-
-                console.log('saved', details);
                 db.put(doc);
-            }).error(function(data, status) {
-                console.log('failed to save questionnaire', status);
             });
 
             return db.get(details._id);

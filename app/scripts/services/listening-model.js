@@ -49,13 +49,10 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                     last_updated: row.updated_at
                 }
 
-                db.put(doc).then(function(doc) {
-                    console.log('put', doc);
-                });
+                db.put(doc);
             });
         }).error(function(data, status) {
             console.log('error', status);
-            console.log(data);
         });
 
         // send what we've got to the server
@@ -72,6 +69,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                     doc.last_synced = data.updated_at;
 
                     db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
+                        // I'm pretty sure _rev doesn't work this way...
                         console.log('failed to save', doc._id, ',', err);
                     });
                 }); // todo: error is ignored because id will remain 'pending', maybe handle it better

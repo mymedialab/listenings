@@ -51,11 +51,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
                 });
             }
             taggable.existing = reformattedTags;
-            console.log('tags', taggable);
         });
-
-        console.log('tags:', questionnaire.taggable);
-        console.log('questions:', questionnaire.questions);
 
         questionnaire.questions && questionnaire.questions.forEach(function(question) {
             reformattedQuestions.push({question: question, response: ''});
