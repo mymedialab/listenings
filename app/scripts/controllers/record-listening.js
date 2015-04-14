@@ -54,7 +54,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         });
 
         questionnaire.questions && questionnaire.questions.forEach(function(question) {
-            reformattedQuestions.push({question: question, response: ''});
+            reformattedQuestions.push({question: question, answer: ''});
         });
 
         $scope.answers.taggable = questionnaire.taggable;

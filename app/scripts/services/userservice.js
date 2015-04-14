@@ -11,7 +11,7 @@ angular.module('listeningsApp').factory('UserService', function ($http, ngToast)
     var self = {};
 
     self.addNew = function(credentials) {
-      $http.post('/api/user', credentials).then(function() {
+      return $http.post('/api/user', credentials).then(function() {
           ngToast.create({content:'New user added.', className: 'success'});
       }, function() {
           ngToast.create({content:'Failed to add new user.', className: 'danger'});
@@ -19,7 +19,7 @@ angular.module('listeningsApp').factory('UserService', function ($http, ngToast)
     };
 
     self.update = function(details) {
-        $http.put('/api/user/update', details).then(function() {
+        return $http.put('/api/user/update', details).then(function() {
             ngToast.create({content:'User details updated.', className: 'success'});
         }, function() {
             ngToast.create({content:'update failed.', className: 'success'});

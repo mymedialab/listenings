@@ -53,14 +53,12 @@ class InterviewsController extends Controller {
 		$interview->save();
 
 		if (Input::has('questions') && $interview->type === 'interview') {
-			foreach (Input::get('questions') as $entry) {
-				$interview->responses->add(
-					InterviewResponse::firstOrCreate([
-						'question'     => $entry['question'],
-						'answer'       => $entry['response'],
-						'interview_id' => $interview->id
-					])
-				);
+			foreach (Input::get('questions') as $response) {
+				InterviewResponse::create([
+					'question'     => $response['question'],
+					'answer'       => $response['answer'],
+					'interview_id' => $interview->id
+				]);
 			}
 		}
 
@@ -78,7 +76,6 @@ class InterviewsController extends Controller {
 		// }
 
 		$interview->push();
-
 
 		return Response::json(Interview::with('responses')->find($interview->id), 200);
 	}
