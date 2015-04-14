@@ -7,14 +7,21 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
     var download = function() {
         return $http.get('/api/questionnaires').success(function(data) {
             var docs = [];
+            return db.allDocs({}).then(function(existing) {
+                data.forEach(function(row) {
+                    row._id = row.name;
+                    existing.rows.some(function(found) {
+                        if (row._id === found.id) {
+                            row._rev = found.value.rev;
+                            return true;
+                        }
+                    });
+                    docs.push(row);
+                });
 
-            data.forEach(function(row) {
-                row._id = row.name;
-                docs.push(row);
-            });
-
-            return db.bulkDocs(docs).then(function() {
-                return db.allDocs({include_docs: true}); // jshint ignore:line
+                return db.bulkDocs(docs).then(function() {
+                    return db.allDocs({include_docs: true}); // jshint ignore:line
+                });
             });
         }).error(function() {
             return db.allDocs({include_docs: true}); // jshint ignore:line
