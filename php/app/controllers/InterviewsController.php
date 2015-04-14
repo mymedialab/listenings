@@ -62,18 +62,7 @@ class InterviewsController extends Controller {
 			}
 		}
 
-		// if (Input::has('taggable')) {
-		// 	foreach (Input::get('questions') as $entry) {
-		// 		$interview->responses->add(
-		// 			InterviewResponse::firstOrCreate([
-		// 				'question' => $entry['question'],
-		// 				'answer' => $entry['response'],
-		// 				'interview_id' => $interview->id
-		// 			])
-		// 		);
-		// 	}
-			// todo: create tags/tag lists
-		// }
+		// @todo save any tags to this interview, and to the questionaire
 
 		$interview->push();
 

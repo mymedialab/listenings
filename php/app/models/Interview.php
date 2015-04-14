@@ -27,4 +27,9 @@ class Interview extends \Eloquent {
   {
       return $this->belongsTo('Questionnaire', 'questionnaire_id', 'id');
   }
+
+  public function tagLists()
+  {
+      return $this->belongsToMany('TagList', 'interview_tag_lists');
+  }
 }

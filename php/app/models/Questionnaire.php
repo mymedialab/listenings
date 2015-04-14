@@ -15,4 +15,9 @@ class Questionnaire extends \Eloquent {
   {
       return $this->hasMany('Interview');
   }
+
+  public function tagLists()
+  {
+      return $this->belongsToMany('TagList', 'questionnaire_tag_lists');
+  }
 }

@@ -52,6 +52,13 @@ class QuestionnaireController extends Controller {
 			}
 		}
 
+		if (Input::has('taggable')) {
+			foreach (Input::get('taggable') as $tagList) {
+				$questionnaire->tagLists()->save(TagList::create(['name' => $tagList['name']]));
+			}
+			$questionnaire->load('tagLists');
+		}
+
 		$questionnaire->push();
 
 		return Response::json($questionnaire, 201);
