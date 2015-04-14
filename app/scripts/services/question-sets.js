@@ -1,59 +1,34 @@
 /* In the api this is a questionnaire? */
 angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $http) {
     'use strict';
-    var db = pouchDB('questions');
+    var db = pouchDB('questionnaires');
     var self = {};
     var current = {};
-    var sets = [];
     var questionnaires = [];
 
-    self.init = function() {
-        $http.get('/api/questionnaires').success(function(data) {
-            questionnaires = data;
-        }).error(function(data) {
-            questionnaires = [];
-        });
-    };
+    var download = function() {
+        return $http.get('/api/questionnaires').success(function(data) {
+            var docs = [];
 
-    var findQuestionsByName = function(name) {
-         var found = sets.filter(function(input) {
-            return input.name === name;
+            data.forEach(function(row) {
+                row._id = row.name;
+                docs.push(row);
+            })
+
+            return db.bulkDocs(docs).then(function() {return db.allDocs({include_docs: true})});
+        }).error(function(data) {
+            console.log('failed to download thingies')
+            return db.allDocs({include_docs: true});
         });
-        return found.length ? found[0] : false;
     };
 
     // @todo attempt to pull down from server and over-write current.
 
-    self.listSets = function(fn) {
-        return $q(function(resolve, reject) {
-
-            if (sets.length) {
-                if (fn && typeof(fn) === 'function') {
-                    fn(sets);
-                }
-                resolve(sets);
-                return;
-            }
-
-            db.allDocs({include_docs: true}).then(function(res) {
-                var sets = [];
-                res.rows.forEach(function(row) { sets.push(row.doc); });
-
-                console.log('getlist', sets);
-
-                if (fn && typeof(fn) === 'function') {
-                    fn(sets);
-                }
-                resolve(sets);
-            }).catch(function() {
-                resolve([]);
-            });
-        });
+    self.listSets = function() {
+        return download();
     };
 
     self.getQuestions = function (setName) {
-        console.log('looking up', setName);
-
         return db.get(setName);
     };
 
@@ -72,8 +47,19 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
         details.id       = 'pending';
         details._id      = details.name;
 
-        return $q(function(resolve, reject) {
-            db.put(details).then(resolve).catch(reject);
+        return db.put(details).then(function() {
+            return db.get(details._id);
+        }).then(function(doc) {
+            $http.post('/api/questionnaires', details).success(function(data) {
+                doc.id = data.id;
+
+                console.log('saved', details);
+                db.put(doc);
+            }).error(function(data, status) {
+                console.log('failed to save questionnaire', status);
+            });
+
+            return db.get(details._id);
         });
     };
 

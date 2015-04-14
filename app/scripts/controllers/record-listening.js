@@ -21,7 +21,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     $scope.save = function(answers) {
         var listening = cloneObj(answers);
         // reformat for the model, reduce the array of objects down to an array of strings
-        listening.taggable.forEach(function(taggable) {
+        listening.taggable && listening.taggable.forEach(function(taggable) {
             taggable.tagged = taggable.tagged.map(function(obj) {
                 return obj.text;
             });
@@ -38,16 +38,12 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         listeningModel.sync();
     };
 
-    console.log('questionssss!>');
-
     questionSets.getQuestions($routeParams.set).then(function(res) {
         var reformattedQuestions = [];
-        var question = cloneObj(res);
+        var questionnaire = cloneObj(res);
 
         // reformat for the html
-        console.log('questionssss', res);
-
-        question.taggable.forEach(function(taggable) {
+        questionnaire.taggable && questionnaire.taggable.forEach(function(taggable) {
             var reformattedTags = [];
             if (taggable.existing) {
                 taggable.existing.forEach(function(tagText) {
@@ -57,13 +53,16 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
             taggable.existing = reformattedTags;
             console.log('tags', taggable);
         });
-        question.questions.forEach(function(question) {
-            console.log('question', question);
+
+        console.log('tags:', questionnaire.taggable);
+        console.log('questions:', questionnaire.questions);
+
+        questionnaire.questions && questionnaire.questions.forEach(function(question) {
             reformattedQuestions.push({question: question, response: ''});
         });
 
-        $scope.answers.taggable = question.taggable;
+        $scope.answers.taggable = questionnaire.taggable;
         $scope.answers.questions = reformattedQuestions;
         $scope.loading = false;
-    }).catch(function(a) {console.log('fuicked', a)});
+    });
 });

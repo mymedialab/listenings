@@ -1,19 +1,24 @@
-/* In the API a listening is an interview */
+/**
+ * an Interview document uses the user id and the recordedAt timestamp for the document ID.
+ *
+ * This should be sufficient to make interviews unique
+ * a double-bounce save for instance will resolve to the same document
+ */
 angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, $http, Session) {
     'use strict';
-    var db = pouchDB('listenings');
+    var db   = pouchDB('interviews');
     var self = {};
 
     self.storeListening = function(details) {
-        return $q(function(resolve) {
-            details.recordedAt = new Date().getTime();
-            details.id  = 'pending';
-            details._id = new Date().toISOString();
+        var date     = new Date();
+        var time     = date.getTime(); //milliseconds
+        var now = Math.floor(time / 1000);
 
-            db.put(details).then(function(doc) {
-                resolve(doc);
-            });
-        });
+        details.recordedAt = now;
+        details.id         = 'pending';
+        details._id        = Session.user.id + '/' + now;
+
+        return db.put(details);
     };
 
     self.getAllListenings = function () {
@@ -24,8 +29,37 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
      * work out what needs syncing and make it so
      */
     self.sync = function() {
+        $http.get('/api/interviews').success(function(data) {
+            data.forEach(function(row) {
+                var sync = false, id, doc = {};
+                var date = new Date(row.date);
+                // adjust the date for timezone, this ensures that times match the stored (UTC) _id values
+                var dateUtc = Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 1000);
+
+                id = row.interviewer_id + '/' + dateUtc;
+
+                doc = {
+                    _id: id,
+                    id: row.id,
+                    type: row.type,
+                    questionSet: row.questionnaire && row.questionnaire.name || 'unknown',
+                    location: row.location,
+                    questions: row.responses,
+                    recordedAt: date,
+                    last_updated: row.updated_at
+                }
+
+                db.put(doc).then(function(doc) {
+                    console.log('put', doc);
+                });
+            });
+        }).error(function(data, status) {
+            console.log('error', status);
+            console.log(data);
+        });
+
         // send what we've got to the server
-        db.allDocs({ include_docs: true }).then(function(res) {
+        return db.allDocs({ include_docs: true }).then(function(res) {
             res.rows.forEach(function(row) {
                 var doc = row.doc;
 
@@ -34,13 +68,16 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                 }
 
                 $http.post('/api/interviews', doc).success(function(data) {
-                    Session
-                    doc.id   = data.id;
+                    doc.id          = data.id;
+                    doc.last_synced = data.updated_at;
+
                     db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
-                        console.log('failed to save', doc.id, ',', err);
+                        console.log('failed to save', doc._id, ',', err);
                     });
-                });
+                }); // todo: error is ignored because id will remain 'pending', maybe handle it better
             });
+
+            return db.allDocs({ include_docs: true });
         });
     };
 

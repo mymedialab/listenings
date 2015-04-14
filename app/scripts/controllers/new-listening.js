@@ -12,16 +12,18 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
 
-    console.log('wtf');
-
     $scope.recordNotInterested = function(location, selectedSet) {
         var rejection = {
             type: 'rejection',
             location: location,
             questionSet: selectedSet.name
         };
-        listeningModel.storeListening(rejection);
+        listeningModel.storeListening(rejection).then(listeningModel.sync());
         ngToast.create({content:'Rejection noted.', className: 'success'});
+
+        /* reset form on rejection */
+        $scope.selectedSet = undefined;
+        $scope.location = '';
     };
 
     $scope.createNew = function(location, selectedSet) {
@@ -30,15 +32,9 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
 
     // questionTypes is the questionnaire
     $scope.questionTypes = [];
-    questionSets.listSets().then(function(sets) {
-        console.log('newlistening', sets);
-        $scope.questionTypes = sets;
+    questionSets.listSets().then(function(res) {
+        $scope.questionTypes = res.data;
     }).catch(function(e) {
-        console.log('error', e);
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
-    });
-
-    listeningModel.getAllListenings().then(function(res) {
-        $scope.db = res;
     });
 });

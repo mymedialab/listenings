@@ -1,4 +1,5 @@
 <?php
+use Carbon\Carbon;
 
 class InterviewsController extends Controller {
 
@@ -9,7 +10,7 @@ class InterviewsController extends Controller {
 	 */
 	public function index()
 	{
-		return Response::json(Interview::with('response')->get(), 200);
+		return Response::json(Interview::with('responses')->with('questionnaire')->get(), 200);
 	}
 
 	/**
@@ -22,41 +23,59 @@ class InterviewsController extends Controller {
 	public function store()
 	{
 		$v = Validator::make(Request::all(), [
-			'type' => 'required',
+			'type' => 'required|string',
 			'questionSet' => 'required|string',
 			'location' => 'required',
 			'recordedAt' => 'required',
-			'questions' => 'required|array',
+			'questions' => 'array',
 			'taggable' => 'array',
+			'location' => 'string',
 		]);
 
-		if ($v->fails() || Input::get('type') !== 'interview') {
-			if (Input::get('type') !== 'interview') {
-				$v->errors()->add('type', 'must be "interview"');
-			}
+		if ($v->fails()) {
 			return Response::json([ 'errors' => $v->errors() ], 400);
 		}
 
-		$Date = date_create_from_format('U', Input::get('recordedAt'));
+		$Date = Carbon::createFromTimeStamp(Input::get('recordedAt'));
 
-		$interview = Interview::firstOrCreate([
-			'date' => $Date,
-			'interviewer_id' => Auth::user()->id
+		$interview = Interview::firstOrNew([
+			'date'           => $Date,
+			'interviewer_id' => Auth::user()->id,
 		]);
 
-		foreach (Input::get('questions') as $entry) {
-			$interview->responses->add(
-				InterviewResponse::firstOrCreate([
-					'question' => $entry['question'],
-					'answer' => $entry['response'],
-					'interview_id' => $interview->id
-				])
-			);
+		// important to fail here, you shouldn't be able to submit an interview for a questionnaire that doesn't exist
+		$interview->questionnaire_id = Questionnaire::where('name', '=', Input::get('questionSet'))->firstOrFail()->id;
+		$interview->type             = Input::get('type');
+		if (Input::has('location')) {
+			$interview->location       = Input::get('location');
 		}
 
-		if (Input::get('taggable')) {
-			// todo: create tags/tag lists
+		$interview->save();
+
+		if (Input::has('questions') && $interview->type === 'interview') {
+			foreach (Input::get('questions') as $entry) {
+				$interview->responses->add(
+					InterviewResponse::firstOrCreate([
+						'question'     => $entry['question'],
+						'answer'       => $entry['response'],
+						'interview_id' => $interview->id
+					])
+				);
+			}
 		}
+
+		// if (Input::has('taggable')) {
+		// 	foreach (Input::get('questions') as $entry) {
+		// 		$interview->responses->add(
+		// 			InterviewResponse::firstOrCreate([
+		// 				'question' => $entry['question'],
+		// 				'answer' => $entry['response'],
+		// 				'interview_id' => $interview->id
+		// 			])
+		// 		);
+		// 	}
+			// todo: create tags/tag lists
+		// }
 
 		$interview->push();
 

@@ -49,7 +49,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'listenings',
+			'database'  => 'listenings_new',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',

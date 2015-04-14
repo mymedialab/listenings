@@ -33,6 +33,8 @@ class QuestionnaireController extends Controller {
 	{
 		$v = Validator::make(Request::all(), [
 			'name' => 'required|unique:questionnaire',
+			'questions' => 'array',
+			'taggable' => 'array'
 		]);
 
 		if ($v->fails()) {
@@ -40,6 +42,18 @@ class QuestionnaireController extends Controller {
 		}
 
 		$questionnaire = Questionnaire::create([ 'name' => Input::get('name') ]);
+
+		if (Input::has('questions')) {
+			foreach (Input::get('questions') as $question) {
+				Question::create([
+					'question' => $question,
+					'questionnaire_id' => $questionnaire->id
+				]);
+			}
+		}
+
+		$questionnaire->push();
+
 		return Response::json($questionnaire, 201);
 	}
 

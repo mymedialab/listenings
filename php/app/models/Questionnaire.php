@@ -10,4 +10,9 @@ class Questionnaire extends \Eloquent {
   {
       return $this->hasMany('Question');
   }
+
+  public function interviews()
+  {
+      return $this->hasMany('Interview');
+  }
 }

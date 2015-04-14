@@ -8,6 +8,10 @@ class Interview extends \Eloquent {
   protected $table = 'interview';
 
   protected $fillable = ['date', 'interviewer_id'];
+  public function getDates()
+  {
+    return ['date', 'created_at', 'updated_at'];
+  }
 
   public function responses()
   {
@@ -17,5 +21,10 @@ class Interview extends \Eloquent {
   public function interviewer()
   {
       return $this->belongsTo('User', 'interviewer_id', 'id');
+  }
+
+  public function questionnaire()
+  {
+      return $this->belongsTo('Questionnaire', 'questionnaire_id', 'id');
   }
 }

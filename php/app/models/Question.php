@@ -3,7 +3,7 @@
 class Question extends \Eloquent {
   protected $table = 'question';
 
-  protected $fillable = [];
+  protected $fillable = ['question', 'questionnaire_id'];
 
   public function questionnaire()
   {

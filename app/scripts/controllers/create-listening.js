@@ -14,10 +14,6 @@ angular.module('listeningsApp').controller('CreateListeningCtrl', function ($sco
         taggable: []
     };
 
-    questionSets.init();
-
-    console.log($scope);
-
     $scope.saveListening = function(listening) {
         questionSets.create(listening).then(function() {
             ngToast.create({content: 'New type created', className: 'success'});
