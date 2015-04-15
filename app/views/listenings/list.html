@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="listening in listenings | filter:filterByRole">
+        <tr ng-repeat="listening in listenings | filter:filterByRole" ng-class="{'text-muted': listening.accepted === 'N'}">
             <td>{{ listening.questionSet }}</td>
             <td>{{ listening.location }}</td>
             <td>{{ listening.date }}</td>
