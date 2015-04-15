@@ -28,7 +28,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
 
     self.find = function(id) {
         return db.get(id);
-    }
+    };
 
     /**
      * work out what needs syncing and make it so
