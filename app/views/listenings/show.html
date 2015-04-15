@@ -1,0 +1,27 @@
+
+<h1>{{interview.questionSet}} <small>{{interview.location}}</small></h1>
+
+<div ng-show="allowedUser">
+    <p ng-hide="interview.questions">No responses found</p>
+    <h4 ng-show="interview.questions">Responses</h4>
+    <dl ng-show="interview.questions" ng-repeat="response in interview.questions">
+        <dt>{{response.question}}</dt>
+        <dd>{{response.answer}}</dd>
+    </dl>
+
+    <p ng-hide="interview.taggable">No tags found</p>
+
+    <h4 ng-show="interview.taggable">Tags</h4>
+    <dl ng-show="interview.taggable" ng-repeat="taglist in interview.taggable">
+        <dt>{{taglist.name}}</dt>
+        <dd>
+            <ul class="list-inline">
+                <li ng-repeat="tag in taglist.tagged">{{tag}}</li>
+            </ul>
+        </dd>
+    </dl>
+</div>
+
+<div ng-hide="allowedUser">
+    <p>Permission denied</p>
+</div>

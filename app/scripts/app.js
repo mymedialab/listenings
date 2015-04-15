@@ -39,6 +39,10 @@ angular
         templateUrl: 'views/listenings/new.html',
         controller: 'NewListeningCtrl'
       })
+      .when('/listening/show/:listening_id', {
+        templateUrl: 'views/listenings/show.html',
+        controller: 'ShowListeningCtrl'
+      })
       .when('/listening/record/:location/:set', {
         templateUrl: 'views/listenings/record.html',
         controller: 'RecordListeningCtrl'

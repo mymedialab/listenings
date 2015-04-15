@@ -16,6 +16,7 @@
             <th>Recorded at</th>
             <th>Accepted</th>
             <th>Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
             <td>{{ listening.date }}</td>
             <td>{{ listening.accepted }}</td>
             <td>{{ listening.status }}</td>
+            <td><a class="btn btn-default btn-xs" ng-if="listening.accepted === 'Y'" ng-href="/#/listening/show/{{listening.userId}}-{{listening.recordedAt}}">view</a></td>
         </tr>
     </tbody>
 </table>

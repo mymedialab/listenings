@@ -4,7 +4,7 @@
  * This should be sufficient to make interviews unique
  * a double-bounce save for instance will resolve to the same document
  */
-angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, $http, Session) {
+angular.module('listeningsApp').service('listeningModel', function(pouchDB, $http, Session) {
     'use strict';
     var db   = pouchDB('interviews');
     var self = {};
@@ -25,6 +25,10 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
     self.getAllListenings = function () {
         return db.allDocs({ include_docs: true }); // jshint ignore:line
     };
+
+    self.find = function(id) {
+        return db.get(id);
+    }
 
     /**
      * work out what needs syncing and make it so
