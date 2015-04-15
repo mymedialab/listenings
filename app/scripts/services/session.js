@@ -7,7 +7,7 @@
  * # Session
  * Service in the listeningsApp.
  */
-angular.module('listeningsApp').service('Session', function () {
+angular.module('listeningsApp').service('Session', function ($location) {
       this.create = function (sessionId, user) {
         this.id = sessionId;
         this.user = user;
@@ -15,6 +15,9 @@ angular.module('listeningsApp').service('Session', function () {
       this.destroy = function () {
         this.id = null;
         this.user = null;
+
+        // redirect to the root (aka login screen) after session destroy
+        $location.path('/');
       };
       return this;
 });

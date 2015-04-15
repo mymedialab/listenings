@@ -7,7 +7,7 @@
  * # ListListeningsCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel) {
+angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session) {
     function padZeros(str) {
         str = '' + str; // coerce to string, because Javascript.
         while (str.length < 2) {
@@ -42,4 +42,8 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         $scope.listenings = [];
         $scope.loading = false;
     });
+
+    $scope.filterByRole = function(element) {
+        return Session.user && (Session.user.is_admin || element.userId === Session.user.id);
+    }
 });

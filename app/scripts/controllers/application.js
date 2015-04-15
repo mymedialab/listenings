@@ -26,6 +26,4 @@ angular.module('listeningsApp').controller('ApplicationCtrl', function ($scope, 
     AuthService.findOpenSession().then(function() {
         $scope.loading = false;
     });
-
-    AuthService.findOpenSession();
 });

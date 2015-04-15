@@ -29,6 +29,7 @@
         <ul class="nav nav-pills pull-right">
           <li ng-class="{active: isActive('/')}"><a ng-href="#/">Home</a></li>
           <li ng-if="user" ng-class="{active: isActive('/listening/new')}"><a ng-href="#/listening/new">New Listening</a></li>
+          <li ng-cloak ng-if="user && !user.is_admin" ng-class="{active: isActive('/listening/list')}"><a ng-href="#/listening/list">My Listenings</a></li>
           <li ng-if="user && user.is_admin" ng-class="{active: isActive('/admin')}"><a ng-href="#/admin">Admin</a></li>
           <li ng-if="user"><a ng-click="logout()">Logout</a></li>
         </ul>

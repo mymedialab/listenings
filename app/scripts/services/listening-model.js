@@ -10,13 +10,14 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
     var self = {};
 
     self.storeListening = function(details) {
-        var date     = new Date();
-        var time     = date.getTime(); //milliseconds
-        var now = Math.floor(time / 1000);
+        var date = new Date();
+        var time = date.getTime(); //milliseconds
+        var now  = Math.floor(time / 1000);
 
         details.recordedAt = now;
         details.id         = 'pending';
         details._id        = Session.user.id + '/' + now;
+        details.userId     = Session.user.id;
 
         return db.put(details);
     };
@@ -46,7 +47,8 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                     location: row.location,
                     questions: row.responses,
                     recordedAt: date,
-                    last_updated: row.updated_at // jshint ignore:line
+                    last_updated: row.updated_at, // jshint ignore:line
+                    userId: row.interviewer_id
                 };
 
                 db.put(doc);

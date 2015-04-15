@@ -1,37 +1,31 @@
 <h1>Current Listenings</h1>
 
-<div ng-if="!isAdmin()">
-    <p>Permission denied.</p>
+<div ng-show="loading">
+    <h2>Loading Listenings</h2>
 </div>
 
-<div ng-if="isAdmin()">
-
-    <div ng-show="loading">
-        <h2>Loading Listenings</h2>
-    </div>
-    <div ng-show="!loading && !listenings.length">
-        <h2>No listenings found</h2>
-    </div>
-
-    <table ng-show="!loading && listenings.length" class="table">
-        <thead>
-            <tr>
-                <th>Listening title</th>
-                <th>Location</th>
-                <th>Recorded at</th>
-                <th>Accepted</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="listening in listenings">
-                <td>{{ listening.questionSet }}</td>
-                <td>{{ listening.location }}</td>
-                <td>{{ listening.date }}</td>
-                <td>{{ listening.accepted }}</td>
-                <td>{{ listening.status }}</td>
-            </tr>
-        </tbody>
-    </table>
-
+<div ng-show="!loading && !listenings.length">
+    <h2>No listenings found</h2>
 </div>
+
+<table ng-show="!loading && listenings.length" class="table">
+    <thead>
+        <tr>
+            <th>Listening title</th>
+            <th>Location</th>
+            <th>Recorded at</th>
+            <th>Accepted</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="listening in listenings | filter:filterByRole">
+            <td>{{ listening.questionSet }}</td>
+            <td>{{ listening.location }}</td>
+            <td>{{ listening.date }}</td>
+            <td>{{ listening.accepted }}</td>
+            <td>{{ listening.status }}</td>
+        </tr>
+    </tbody>
+</table>
+
