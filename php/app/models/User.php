@@ -25,4 +25,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 
 	protected $fillable = array('name', 'username', 'password', 'email');
+
+	/**
+	 * force boolean coercion for the is_admin column
+	 * On ubuntu installations without the mysqlnd extension installed, it will be coerced to a string!
+	 */
+	public function getIsAdminAttribute($value)
+	{
+		return !!((int) $value);
+	}
 }
