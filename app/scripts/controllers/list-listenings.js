@@ -44,6 +44,6 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     });
 
     $scope.filterByRole = function(element) {
-        return Session.user && (Session.user.is_admin || element.userId === Session.user.id);
-    }
+        return Session.user && (Session.user.is_admin || element.userId === Session.user.id); // jshint ignore:line
+    };
 });

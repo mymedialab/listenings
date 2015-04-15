@@ -48,7 +48,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $q, 
                     questions: row.responses,
                     recordedAt: date,
                     last_updated: row.updated_at, // jshint ignore:line
-                    userId: row.interviewer_id
+                    userId: row.interviewer_id // jshint ignore:line
                 };
 
                 db.put(doc);
