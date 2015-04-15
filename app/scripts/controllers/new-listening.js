@@ -7,7 +7,7 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, ngToast, listeningModel, questionSets) {
+angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, ngToast, listeningModel, questionSets, CurrentQuestionSetService) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
@@ -20,13 +20,12 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
         };
         listeningModel.storeListening(rejection).then(listeningModel.sync());
         ngToast.create({content:'Rejection noted.', className: 'success'});
-
-        /* reset form on rejection */
-        $scope.selectedSet = undefined;
-        $scope.location = '';
     };
 
     $scope.createNew = function(location, selectedSet) {
+        CurrentQuestionSetService.selectedSet = selectedSet;
+        CurrentQuestionSetService.location = location;
+
         $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
     };
 
@@ -34,6 +33,15 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     $scope.questionTypes = [];
     questionSets.listSets().then(function(res) {
         $scope.questionTypes = res.data;
+        if (CurrentQuestionSetService.selectedSet) {
+            res.data.some(function(item) {
+                if (CurrentQuestionSetService.selectedSet.id === item.id) {
+                    $scope.selectedSet = item;
+                    return true;
+                }
+            });
+            $scope.location = CurrentQuestionSetService.location || '';
+        }
     }).catch(function() {
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });
