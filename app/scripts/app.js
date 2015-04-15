@@ -18,6 +18,7 @@ angular
     'ngTouch',
     'pouchdb',
     'ngTagsInput',
+    'angular-loading-bar',
     'ngToast'
   ])
   .config(function ($routeProvider) {
