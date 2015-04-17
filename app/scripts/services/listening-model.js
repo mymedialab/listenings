@@ -49,6 +49,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
                     type: row.type,
                     questionSet: row.questionnaire && row.questionnaire.name || 'unknown',
                     location: row.location,
+                    houseno: row.houseno,
                     questions: row.responses,
                     recordedAt: date,
                     last_updated: row.updated_at, // jshint ignore:line

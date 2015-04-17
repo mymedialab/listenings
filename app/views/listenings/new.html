@@ -11,8 +11,12 @@
         </div>
     </div>
 
-    <div class="col-sm-12">
-        <div class="form-group">
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="houseno">House Number</label>
+            <input id="houseno" type="text" ng-model="houseno" class="form-control" required>
+        </div>
+        <div class="col-sm-9">
             <label for="location">Rough location <small class="text-muted">e.g {{ placeholder }}</small></label>
             <input id="location" type="text" ng-model="location" class="form-control" required>
         </div>
@@ -24,12 +28,12 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-block btn-success" ng-click="createNew(location, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+            <button class="btn btn-block btn-success" ng-click="createNew(location, houseno, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-block btn-danger" ng-click="recordNotInterested(location, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
+            <button class="btn btn-block btn-danger" ng-click="recordNotInterested(location, houseno, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
         </div>
     </div>
 
