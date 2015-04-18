@@ -20,8 +20,8 @@
 
     <div class="col-md-12 form-group" ng-repeat="(index, tag) in answers.taggable">
         <label for="tag-{{ index }}">Tag interview: {{ tag.name }}</label>
-        <tags-input ng-model="tag.tagged">
-            <auto-complete source="tag.existing"></auto-complete>
+        <tags-input ng-model="tag.tagged" min-length="1">
+            <auto-complete source="tag.existing" min-length="1"></auto-complete>
         </tags-input>
     </div>
 

@@ -19,7 +19,9 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     });
 
     $scope.recordNotInterested = function(location, houseno, selectedSet) {
-        var rejection = {
+        var rejection;
+        location = (typeof(location) === 'string') ? location : location[0].text;
+        rejection = {
             type: 'rejection',
             location: location,
             houseno: houseno,
@@ -30,6 +32,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     };
 
     $scope.createNew = function(location, houseno, selectedSet) {
+        console.log(location);
         CurrentQuestionSetService.selectedSet = selectedSet;
         CurrentQuestionSetService.location = location;
         CurrentQuestionSetService.houseno = houseno;
