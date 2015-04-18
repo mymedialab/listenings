@@ -12,16 +12,20 @@ angular.module('listeningsApp').service('locationModel', function(pouchDB, $http
         var results = ['something?'];
 
         return fetchFromServer()
-            .then(function(data) {
-                results = ['success!'];
-                return results;
+            .then(function(res) {
+                var all = res.data.map(function(row) {
+                    var doc = {_id: row.location}; /* this is a flat array, so pop the bit we want as an id. */
+                    db.put(doc); // will auto de-dupe too!
+                    return row.location;
+                });
+                return all;
             })
             .catch(function(err) {
-                return db.allDocs({include_docs: true}).then(function(res) {
-                    var rows = res.rows.map(function() {
-
+                return db.allDocs().then(function(res) {
+                    var all = res.rows.map(function(row) {
+                        return row.id;
                     });
-                    return rows;
+                    return all;
                 });
             });
     };
