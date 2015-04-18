@@ -20,7 +20,7 @@ angular.module('listeningsApp').service('locationModel', function(pouchDB, $http
                 });
                 return all;
             })
-            .catch(function(err) {
+            .catch(function() {
                 return db.allDocs().then(function(res) {
                     var all = res.rows.map(function(row) {
                         return row.id;
