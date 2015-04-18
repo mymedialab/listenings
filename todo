@@ -1,5 +1,5 @@
-Write a locations controller with a get all method on /locations
-BUG: Can;t add listening offline!
+BUG: Can't add listening offline!
+For fetches, setup a short timeout. (For put's  / post's just let it keep trying)
 
 Put on staging
 ---

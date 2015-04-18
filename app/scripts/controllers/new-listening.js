@@ -12,9 +12,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
     $scope.locations = [];
-    console.log(locationModel.all());
     locationModel.all().then(function(res) {
-        console.log(res);
         $scope.locations = res;
     });
 

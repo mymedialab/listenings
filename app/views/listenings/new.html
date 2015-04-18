@@ -20,7 +20,6 @@
     <div class="col-sm-9">
         <div class="form-group">
             <label for="location">Rough location <small class="text-muted">e.g {{ placeholder }}</small></label>
-            <!-- <input id="location" type="text" ng-model="location" class="form-control" required> -->
             <tags-input ng-model="location" max-tags="1" placeholder="" min-length="1">
                 <auto-complete source="locations" min-length="1"></auto-complete>
             </tags-input>
