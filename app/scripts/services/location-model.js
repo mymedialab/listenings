@@ -9,8 +9,6 @@ angular.module('listeningsApp').service('locationModel', function(pouchDB, $http
     }
 
     self.all = function() {
-        var results = ['something?'];
-
         return fetchFromServer()
             .then(function(res) {
                 var all = res.data.map(function(row) {
