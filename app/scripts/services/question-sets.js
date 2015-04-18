@@ -3,12 +3,13 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
     'use strict';
     var db = pouchDB('questionnaires');
     var self = {};
+    var lastSync;
 
     var download = function() {
-        return $http.get('/api/questionnaires').success(function(data) {
+        return $http.get('/api/questionnaires').then(function(res) {
             var docs = [];
             return db.allDocs({}).then(function(existing) {
-                data.forEach(function(row) {
+                res.data.forEach(function(row) {
                     row._id = row.name;
                     existing.rows.some(function(found) {
                         if (row._id === found.id) {
@@ -20,15 +21,20 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
                 });
 
                 return db.bulkDocs(docs).then(function() {
+                    lastSync = new Date().getTime();
                     return db.allDocs({include_docs: true}); // jshint ignore:line
                 });
             });
-        }).error(function() {
+        }).catch(function() {
             return db.allDocs({include_docs: true}); // jshint ignore:line
         });
     };
 
     self.listSets = function() {
+        // one fetch per 30 seconds
+        if (lastSync && (lastSync > (new Date().getTime() - 30000))) {
+            return db.allDocs({include_docs: true}); // jshint ignore:line
+        }
         return download();
     };
 

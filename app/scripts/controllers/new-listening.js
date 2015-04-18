@@ -41,10 +41,12 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     // questionTypes is the questionnaire
     $scope.questionTypes = [];
     questionSets.listSets().then(function(res) {
-        $scope.questionTypes = res.data;
+        $scope.questionTypes = res.rows.map(function(row) {
+            return row.doc;
+        });
         if (CurrentQuestionSetService.selectedSet) {
-            res.data.some(function(item) {
-                if (CurrentQuestionSetService.selectedSet.id === item.id) {
+            $scope.questionTypes.some(function(item) {
+                if (CurrentQuestionSetService.selectedSet._id === item._id) {
                     $scope.selectedSet = item;
                     return true;
                 }
