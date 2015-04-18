@@ -7,7 +7,7 @@
 class Interview extends \Eloquent {
   protected $table = 'interview';
 
-  protected $fillable = ['date', 'interviewer_id'];
+  protected $fillable = ['date', 'interviewer_id', 'type', 'location', 'house_number'];
   public function getDates()
   {
     return ['date', 'created_at', 'updated_at'];

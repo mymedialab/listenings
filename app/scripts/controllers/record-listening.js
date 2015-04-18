@@ -15,7 +15,8 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     $scope.answers = {
         type : 'interview',
         questionSet : $routeParams.set,
-        location : $routeParams.location
+        location : $routeParams.location,
+        houseno : $routeParams.houseno
     };
 
     $scope.save = function(answers) {

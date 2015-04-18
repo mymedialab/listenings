@@ -30,6 +30,7 @@ class InterviewsController extends Controller {
 			'questions' => 'array',
 			'taggable' => 'array',
 			'location' => 'string',
+			'houseno' => 'string',
 		]);
 
 		if ($v->fails()) {
@@ -48,6 +49,9 @@ class InterviewsController extends Controller {
 		$interview->type             = Input::get('type');
 		if (Input::has('location')) {
 			$interview->location       = Input::get('location');
+		}
+		if (Input::has('houseno')) {
+			$interview->house_number = Input::get('houseno');
 		}
 
 		$interview->save();

@@ -28,7 +28,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
         CurrentQuestionSetService.location = location;
         CurrentQuestionSetService.houseno = houseno;
 
-        $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name));
+        $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name) + '/' + encodeURIComponent(houseno));
     };
 
     // questionTypes is the questionnaire

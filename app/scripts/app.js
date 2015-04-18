@@ -43,7 +43,7 @@ angular
         templateUrl: 'views/listenings/show.html',
         controller: 'ShowListeningCtrl'
       })
-      .when('/listening/record/:location/:set', {
+      .when('/listening/record/:location/:set/:houseno', {
         templateUrl: 'views/listenings/record.html',
         controller: 'RecordListeningCtrl'
       })
