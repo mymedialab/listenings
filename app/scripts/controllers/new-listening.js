@@ -32,11 +32,11 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     };
 
     $scope.createNew = function(location, houseno, selectedSet) {
-        console.log(location);
         CurrentQuestionSetService.selectedSet = selectedSet;
         CurrentQuestionSetService.location = location;
         CurrentQuestionSetService.houseno = houseno;
 
+        location = (typeof(location) === 'string') ? location : location[0].text;
         $location.path('/listening/record/' + encodeURIComponent(location) + '/' + encodeURIComponent(selectedSet.name) + '/' + encodeURIComponent(houseno));
     };
 
