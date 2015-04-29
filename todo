@@ -1,14 +1,25 @@
+BUGS:
+
+1. Blank house number field breaks new listening page
+2. Server sync inconsistent
+3. Tags not filtering (specifically when recording listening)
+4. Tags not showing in lists
+5. Edit questionnaires to add/remove/edit questions (not really a bug?)
+
+SPRINT THE SECOND:
+
+1. Capture personal information into its own table and link to interview
+2. Add area field, change 'rough location' to 'road' and have roads belong to areas
+3. Stats page, select area, road (or all) and tags (or all?) with some options an that. Display chart (chart.js?) make it look gud.
+
+----- cap here after 4 days!
+
+4. User roles (view only, record and review, review with personal details, admin)
+5. Annotate completed interviews. Text field for general input and an extra tag field for follow-up.
+
+PREVIOUSLY:
+
 For fetches, setup a short timeout. (For put's  / post's just let it keep trying)
-
-Put on staging
----
-
 Nav menu as per easterschool
-Don't wipe "new" screen on creation
 Change password / recover password
-Click through to see full responses
-Admin specifc listing (user)
-
----
-
 Also; add people as another (searchable, linked) entity.
