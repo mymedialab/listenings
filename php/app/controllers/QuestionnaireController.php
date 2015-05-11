@@ -78,7 +78,7 @@ class QuestionnaireController extends Controller {
 		$questionnaire = Questionnaire::find($id);
 
 		if (is_null($questionnaire)) {
-			return Response::json([ 'error'=> 'no such questionnaire found' ], 404);
+			return Response::json([ 'error' => 'no such questionnaire found' ], 404);
 		}
 
 		$questionnaire->name = Input::get('name');
