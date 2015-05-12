@@ -19,6 +19,9 @@ Route::post('api/login', 'AuthController@login');
 Route::post('api/logout', 'AuthController@logout');
 Route::get('api/session', 'AuthController@session');
 
+// used for clientside error capturing
+Route::post('api/log', 'LogController@store');
+
 Route::controller('api/password', 'RemindersController');
 
 Route::post('api/user/available', 'UserController@available');

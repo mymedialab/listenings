@@ -62,4 +62,25 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  }).config(function($provide) {
+    /**
+     * delegate logging to our api endpoint, this is to make debugging clientside issues easier
+     */
+    var postError = function(message) {
+      $.ajax({
+        method: 'POST',
+        url: '/api/log',
+        data: {message: message}
+      });
+    }
+
+    $provide.decorator( '$log', function($delegate) {
+      $delegate.log = postError;
+      $delegate.info = postError;
+      $delegate.warn = postError;
+      $delegate.error = postError;
+      $delegate.debug = postError;
+
+      return $delegate;
+    });
   });
