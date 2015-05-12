@@ -7,10 +7,11 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, ngToast, listeningModel, locationModel, questionSets, CurrentQuestionSetService) {
+angular.module('listeningsApp').controller('NewListeningCtrl', function ($log, $scope, $location, ngToast, listeningModel, locationModel, questionSets, CurrentQuestionSetService) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
     $scope.placeholder = ridiculousPlaceholders[rand];
+    $scope.houseno = '';
     $scope.locations = [];
     locationModel.all().then(function(res) {
         $scope.locations = res;
@@ -18,7 +19,11 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
 
     $scope.recordNotInterested = function(location, houseno, selectedSet) {
         var rejection;
-        location = (typeof(location) === 'string') ? location : location[0].text;
+
+        if (typeof(location) === 'object') {
+          location = location[0].text;
+        }
+
         rejection = {
             type: 'rejection',
             location: location,
