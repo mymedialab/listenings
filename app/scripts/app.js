@@ -57,9 +57,13 @@ angular
         templateUrl: 'views/add-user.html',
         controller: 'AddUserCtrl'
       })
-      .when('/listening/create', {
-        templateUrl: 'views/listenings/create.html',
-        controller: 'CreateListeningCtrl'
+      .when('/questionnaire/create', {
+        templateUrl: 'views/questionnaires/create.html',
+        controller: 'CreateQuestionnaireCtrl'
+      })
+      .when('/questionnaire/list', {
+        templateUrl: 'views/questionnaires/list.html',
+        controller: 'ListQuestionnairesCtrl'
       })
       .otherwise({
         redirectTo: '/'

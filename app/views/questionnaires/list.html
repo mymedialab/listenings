@@ -1,0 +1,32 @@
+<h1>Current Questionnaires</h1>
+<div ng-if="!isAdmin()">
+    <p>Permission denied.</p>
+</div>
+
+<div ng-if="isAdmin()">
+    <div ng-show="loading">
+        <h2>Loading Questionnaires</h2>
+    </div>
+
+    <div ng-show="!loading && !questionnaires.length">
+        <h2>No Questionnaires found</h2>
+    </div>
+
+    <table ng-show="!loading && questionnaires.length" class="table">
+        <thead>
+            <tr>
+                <th>Questionnaire title</th>
+                <th>Questions</th>
+                <th>Taggables</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="questionnaire in questionnaires">
+                {{questionnaire}}
+                <td>{{ questionnaire.name }}</td>
+                <td>{{ questionnaire.questions.length }}</td>
+                <td>{{ questionnaire.taggable.length }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
