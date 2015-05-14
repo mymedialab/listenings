@@ -17,10 +17,7 @@ class LogController extends Controller {
 			return Response::json($messages, 400);
 		}
 
-		$context = [];
-		if (Input::get('full')) {
-			$context = Input::get('full');
-		}
+		$context = Input::all();
 
 		\Log::error('client-error - ' . Input::get('message'), $context);
 		return Response::json([], 200);

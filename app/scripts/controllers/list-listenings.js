@@ -8,6 +8,8 @@
  * Controller of the listeningsApp
  */
 angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session, $log) {
+    var syncLimit = 5, presses = 0;
+
     function padZeros(str) {
         str = '' + str; // coerce to string, because Javascript.
         while (str.length < 2) {
@@ -31,6 +33,7 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     }
     $scope.loading = true;
     $scope.syncing = true;
+    $scope.syncDisabled = false;
 
     listeningModel.sync().then(function(res) {
         $scope.listenings = [];
@@ -55,6 +58,23 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     };
 
     $scope.sync = function() {
+        if (presses >= syncLimit) {
+            $scope.syncDisabled = true;
+            ngToast.create({
+              content: 'Sync temporarily disabled, please try again shortly.',
+              className: 'danger'
+            });
+
+            setTimeout(function() {
+                $scope.syncDisabled = false;
+                presses = 0;
+            }, 60000);
+
+            return;
+        }
+
+        presses += 1;
+
         $scope.syncing = true;
 
         listeningModel.sync().then(function() {
