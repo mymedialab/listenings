@@ -1,6 +1,5 @@
 BUGS:
 
-*. Server sync inconsistent <- need to see device possibly, likely date/time related
 *. Edit questionnaires to add/remove/edit questions (not really a bug?)
 *. Tags not showing in lists <- questionnaires need to be editable first!
 
