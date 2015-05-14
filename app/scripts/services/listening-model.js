@@ -4,7 +4,7 @@
  * This should be sufficient to make interviews unique
  * a double-bounce save for instance will resolve to the same document
  */
-angular.module('listeningsApp').service('listeningModel', function(pouchDB, $http, Session) {
+angular.module('listeningsApp').service('listeningModel', function(pouchDB, $http, Session, $log) {
     'use strict';
     var db   = pouchDB('interviews');
     var self = {};
@@ -59,10 +59,11 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
                 db.put(doc);
             });
         }).error(function(data, status) {
-            console.log('error', status);
+            $log.error('Failed to retrieve listenings from the server with status: ' + status, data);
         });
 
         // send what we've got to the server
+        // @todo batch submit these
         return db.allDocs({ include_docs: true }).then(function(res) {  // jshint ignore:line
             res.rows.forEach(function(row) {
                 var doc = row.doc;
@@ -76,10 +77,11 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
                     doc.last_synced = data.updated_at; // jshint ignore:line
 
                     db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
-                        // I'm pretty sure _rev doesn't work this way...
-                        console.log('failed to save', doc._id, ',', err);
+                        $log.error('failed to save ' + doc._id + ', ' + err);
                     });
-                }); // todo: error is ignored because id will remain 'pending', maybe handle it better
+                }).error(function(data, status) {
+                    $log.error('Failed to send listenings to the server with status: ' + status, data);
+                }); // @todo: really I want to return this promise to let my controller generate toasts and stuff.
             });
 
             return db.allDocs({ include_docs: true }); // jshint ignore:line

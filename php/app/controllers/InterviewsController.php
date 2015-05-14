@@ -44,11 +44,18 @@ class InterviewsController extends Controller {
 			'interviewer_id' => Auth::user()->id,
 		]);
 
+		$Questionnaire = Questionnaire::where('name', '=', Input::get('questionSet'))->first();
+
 		// important to fail here, you shouldn't be able to submit an interview for a questionnaire that doesn't exist
-		$interview->questionnaire_id = Questionnaire::where('name', '=', Input::get('questionSet'))->firstOrFail()->id;
+		if (!$Questionnaire) {
+			return Response::json(['message' => 'questionnaire "' . Input::get('questionSet') . '" does not exist'], 400);
+		}
+
+		$interview->questionnaire_id = $Questionnaire->id;
 		$interview->type             = Input::get('type');
+
 		if (Input::has('location')) {
-			$interview->location       = Input::get('location');
+			$interview->location = Input::get('location');
 		}
 		if (Input::has('houseno')) {
 			$interview->house_number = Input::get('houseno');
@@ -80,7 +87,6 @@ class InterviewsController extends Controller {
 				}
 			}
 		}
-
 
 		$interview->push();
 

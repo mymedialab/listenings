@@ -7,7 +7,7 @@
  * # ListListeningsCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session) {
+angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session, $log) {
     function padZeros(str) {
         str = '' + str; // coerce to string, because Javascript.
         while (str.length < 2) {
@@ -30,6 +30,8 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         }
     }
     $scope.loading = true;
+    $scope.syncing = true;
+
     listeningModel.sync().then(function(res) {
         $scope.listenings = [];
         res.rows.forEach(function(row) {
@@ -39,14 +41,33 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
             listening.status = (row.doc.id && parseInt(row.doc.id, 10) > 0) ? 'Saved' : 'Pending';
 
             $scope.listenings.push(listening);
+            $scope.syncing = false;
         });
         $scope.loading = false;
     }).catch(function() {
         $scope.listenings = [];
         $scope.loading = false;
+        $scope.syncing = false;
     });
 
     $scope.filterByRole = function(element) {
         return Session.user && (Session.user.is_admin || element.userId === Session.user.id); // jshint ignore:line
+    };
+
+    $scope.sync = function() {
+        $scope.syncing = true;
+
+        listeningModel.sync().then(function() {
+            $scope.syncing = false;
+        }).catch(function(err) {
+            $log.error('failed to sync manually', err);
+
+            ngToast.create({
+              content: 'Failed to sync all records',
+              className: 'danger'
+            });
+
+            $scope.syncing = false;
+        });
     };
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-/*global $:true */
+/*global $:true, navigator:true, document:true */
 
 /**
  * @ngdoc overview
@@ -68,22 +68,35 @@ angular
     /**
      * delegate logging to our api endpoint, this is to make debugging clientside issues easier
      */
-    var postError = function(message) {
+    var postError = function postError(message) {
       $.ajax({
         method: 'POST',
         url: '/api/log',
-        data: {message: message}
+        data: {
+          message: message,
+          browser: navigator.userAgent || '',
+          viewport: {
+            w: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+            h: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+          },
+          full: arguments
+        }
       });
 
       console.log(message);
     };
 
     $provide.decorator('$log', function($delegate) {
-      $delegate.log = postError;
-      $delegate.info = postError;
-      $delegate.warn = postError;
-      $delegate.error = postError;
-      $delegate.debug = postError;
+      // variadic your variadic.
+      var error = function error() {
+        postError.apply(this, arguments);
+      };
+
+      $delegate.log   = error;
+      $delegate.info  = error;
+      $delegate.warn  = error;
+      $delegate.error = error;
+      $delegate.debug = error;
 
       return $delegate;
     });

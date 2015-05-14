@@ -8,6 +8,15 @@
     <h2>No listenings found</h2>
 </div>
 
+<button class="pull-right btn btn-success"
+        ng-click="sync()"
+        ng-cloak
+        ng-hide="!loading && !listenings.length"
+        ng-disabled="syncing">
+    <span ng-hide="syncing">Sync Now</span>
+    <span ng-show="syncing">Please Wait</span>
+</button>
+
 <table ng-show="!loading && listenings.length" class="table">
     <thead>
         <tr>
@@ -30,4 +39,3 @@
         </tr>
     </tbody>
 </table>
-
