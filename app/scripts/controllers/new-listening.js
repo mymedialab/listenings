@@ -62,4 +62,11 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($log, $
     }).catch(function() {
         ngToast.create({content:'Could not fetch details from server. Please try again.', className: 'danger'});
     });
+
+    /**
+     * provide proper filtering on tag list autocomplete
+     */
+    $scope.filterLocations = function(query) {
+        return $scope.locations.filter(function(tag) { return tag.indexOf(query) > -1; });
+    };
 });

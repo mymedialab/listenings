@@ -56,3 +56,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
     border-bottom: 0;
   }
 }
+
+// override ngTagsInput style, y u do dis?
+tags-input .host {
+  margin-top: 0;
+}

@@ -55,7 +55,12 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
                     });
                 }
                 taggable.existing = reformattedTags;
+
             });
+
+            questionnaire.taggable.filterTags = function(query, tags) {
+                return tags.filter(function(tag) { return tag.indexOf(query) > -1; });
+            };
         }
 
         if (questionnaire.questions) {

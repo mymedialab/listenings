@@ -1,5 +1,7 @@
 'use strict';
 
+/*global $:true */
+
 /**
  * @ngdoc overview
  * @name listeningsApp
@@ -72,9 +74,11 @@ angular
         url: '/api/log',
         data: {message: message}
       });
-    }
 
-    $provide.decorator( '$log', function($delegate) {
+      console.log(message);
+    };
+
+    $provide.decorator('$log', function($delegate) {
       $delegate.log = postError;
       $delegate.info = postError;
       $delegate.warn = postError;

@@ -1,10 +1,8 @@
 BUGS:
 
-1. Blank house number field breaks new listening page
-2. Server sync inconsistent
-3. Tags not filtering (specifically when recording listening)
-4. Tags not showing in lists
-5. Edit questionnaires to add/remove/edit questions (not really a bug?)
+*. Server sync inconsistent <- need to see device possibly, likely date/time related
+*. Tags not showing in lists <- questionnaires need to be editable first!
+*. Edit questionnaires to add/remove/edit questions (not really a bug?)
 
 SPRINT THE SECOND:
 

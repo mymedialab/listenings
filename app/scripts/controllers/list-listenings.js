@@ -16,10 +16,13 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         return str;
     }
     function formatDate(time) {
-        // the date constructor didn't like inline maths
-        var timestamp = time * 1000;
-        // Date expects a timestamp with milliseconds which we've intentionally lost precision on
-        var d = new Date(timestamp);
+        if (!isNaN(time)) {
+            // unix timestamp in seconds from the server
+            time = time * 1000;
+        }
+
+        var d = new Date(time);
+
         if (isNaN(d.getTime())) {
             return 'unknown';
         } else {

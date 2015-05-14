@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label for="location">Rough location <small class="text-muted">e.g {{ placeholder }}</small></label>
                 <tags-input min-tags=1 max-tags=1 ng-model="location" placeholder="" ng-required>
-                    <auto-complete source="locations" min-length="1"></auto-complete>
+                    <auto-complete source="filterLocations($query)" min-length="1" highlight-matched-text=true></auto-complete>
                 </tags-input>
             </div>
         </div>

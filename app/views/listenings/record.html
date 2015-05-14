@@ -3,32 +3,34 @@
 </h1>
 <div class="row">
 
-    <div ng-cloak ng-hide="answers.questions" class="col-md-12 form-group">
-        <p>No questions assigned</p>
-    </div>
-
-    <div class="col-md-12 form-group" ng-repeat="(index, question) in answers.questions">
-        <label for="question-{{ index }}">{{ question.question }}</label>
-        <textarea class="form-control" type="text" id="question-{{ index }}" ng-model="question.answer"></textarea>
-    </div>
-
-    <hr>
-
-    <div ng-cloak ng-hide="answers.taggable" class="col-md-12 form-group">
-        <p>No taggable assigned</p>
-    </div>
-
-    <div class="col-md-12 form-group" ng-repeat="(index, tag) in answers.taggable">
-        <label for="tag-{{ index }}">Tag interview: {{ tag.name }}</label>
-        <tags-input ng-model="tag.tagged" min-length="1">
-            <auto-complete source="tag.existing" min-length="1"></auto-complete>
-        </tags-input>
-    </div>
-
-    <hr>
-    <div class="col-sm-12">
-        <div class="form-group">
-            <button class="btn btn-success btn-block" ng-click="save(answers)"><span class="glyphicon glyphicon-save"></span> Save</button>
+    <form name="interview">
+        <div ng-cloak ng-hide="answers.questions" class="col-md-12 form-group">
+            <p>No questions assigned</p>
         </div>
-    </div>
+
+        <div class="col-md-12 form-group" ng-repeat="(index, question) in answers.questions">
+            <label for="question-{{ index }}">{{ question.question }}</label>
+            <textarea class="form-control" type="text" id="question-{{ index }}" ng-model="question.answer"></textarea>
+        </div>
+
+        <hr>
+
+        <div ng-cloak ng-hide="answers.taggable" class="col-md-12 form-group">
+            <p>No taggable assigned</p>
+        </div>
+
+        <div class="col-md-12 form-group" ng-repeat="(index, tag) in answers.taggable">
+            <label for="tag-{{ index }}">Tag interview: {{ tag.name }}</label>
+            <tags-input ng-model="tag.tagged" min-length="1">
+                <auto-complete source="answers.taggable.filterTags(query, tag.existing)" min-length="1" highlight-matched-text=true></auto-complete>
+            </tags-input>
+        </div>
+
+        <hr>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button class="btn btn-success btn-block" ng-click="save(answers)"><span class="glyphicon glyphicon-save"></span> Save</button>
+            </div>
+        </div>
+    </form>
 </div>
