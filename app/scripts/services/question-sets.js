@@ -26,6 +26,7 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
                 });
             });
         }).catch(function() {
+            // @todo uh, if there's an error just pretend it didn't happen?
             return db.allDocs({include_docs: true}); // jshint ignore:line
         });
     };
@@ -35,6 +36,10 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
         if (lastSync && (lastSync > (new Date().getTime() - 30000))) {
             return db.allDocs({include_docs: true}); // jshint ignore:line
         }
+        return download();
+    };
+
+    self.forceSync = function() {
         return download();
     };
 
@@ -53,6 +58,35 @@ angular.module('listeningsApp').service('questionSets', function(pouchDB, $q, $h
 
         details.taggable = reformattedTaggables;
         details.id       = 'pending';
+        details._id      = details.name;
+
+        return db.put(details).then(function() {
+            return db.get(details._id);
+        }).then(function(doc) {
+            $http.post('/api/questionnaires', details).success(function(data) {
+                doc.id = data.id;
+                db.put(doc);
+            });
+
+            return db.get(details._id);
+        });
+    };
+
+    self.update = function(details) {
+        var reformattedTaggables = [];
+
+        details.questions = details.questions || [];
+
+        (details.taggable || []).forEach(function(taggable) {
+            if (!taggable.existing) {
+                taggable.existing = [];
+            }
+
+            reformattedTaggables.push(taggable);
+        });
+
+        details.taggable = reformattedTaggables;
+        details.id       = details.id || 'pending';
         details._id      = details.name;
 
         return db.put(details).then(function() {

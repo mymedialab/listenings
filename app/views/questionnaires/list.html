@@ -18,6 +18,7 @@
                 <th>Questionnaire title</th>
                 <th>Questions</th>
                 <th>Taggables</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,9 @@
                 <td>{{ questionnaire.name }}</td>
                 <td>{{ questionnaire.questions.length }}</td>
                 <td>{{ questionnaire.taggable.length }}</td>
+                <td>
+                    <a class="btn btn-default btn-xs" ng-href="/#/questionnaire/show/{{questionnaire._id}}">edit</a>
+                </td>
             </tr>
         </tbody>
     </table>

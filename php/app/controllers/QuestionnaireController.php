@@ -65,10 +65,15 @@ class QuestionnaireController extends Controller {
 		return Response::json($questionnaire, 201);
 	}
 
+	/**
+	 * PUT request, we're using it here to mean 'replace the record with'
+	 */
 	public function update($id)
 	{
-		$v = Validator::make($request->all(), [
-			'name' => 'required|unique',
+		$v = Validator::make(Input::all(), [
+			'name'      => 'string',
+			'questions' => 'array',
+			'taggable'  => 'array'
 		]);
 
 		if ($v->fails()) {
@@ -81,7 +86,39 @@ class QuestionnaireController extends Controller {
 			return Response::json([ 'error' => 'no such questionnaire found' ], 404);
 		}
 
-		$questionnaire->name = Input::get('name');
+		if (Input::has('name')) {
+			$questionnaire->name = Input::get('name');
+		}
+
+		$questionIds = Question::where('questionnaire_id', '=', $questionnaire->id)->map(function($item) {
+			return $item->id;
+		});
+
+		Question::destroy($questionIds);
+
+		if (Input::has('questions')) {
+			foreach (Input::get('questions') as $question) {
+				Question::create([
+					'question' => $question,
+					'questionnaire_id' => $questionnaire->id
+				]);
+			}
+		}
+
+		if (Input::has('taggable')) {
+			foreach (Input::get('taggable') as $tagList) {
+				$T = TagList::firstOrNew(['name' => $tagList['name']]);
+
+				if (!$T->exists) {
+					$T->save();
+					// it's a new one!
+					$questionnaire->tagLists()->save($T);
+					$questionnaire->load('tagLists');
+				}
+			}
+		}
+
+		$questionnaire->push();
 
 		return Response::json($questionnaire, 200);
 	}

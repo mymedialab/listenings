@@ -59,7 +59,11 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
             });
 
             questionnaire.taggable.filterTags = function(query, tags) {
-                return tags.filter(function(tag) { return tag.indexOf(query) > -1; });
+                return tags.filter(function(tag) {
+                    if (tag && tag.indexOf) {
+                        return tag.indexOf(query) > -1;
+                    }
+                });
             };
         }
 

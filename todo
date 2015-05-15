@@ -1,7 +1,10 @@
 BUGS:
 
-*. Edit questionnaires to add/remove/edit questions (not really a bug?)
-*. Tags not showing in lists <- questionnaires need to be editable first!
+* Edit questionnaires to add/remove/edit questions (not really a bug?)
+  - what happens to listenings recorded once a questionnaire changes?
+  - add questions/taggables only?
+
+* Tags not showing in lists
 
 SPRINT THE SECOND:
 

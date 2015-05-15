@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2>Edit {{ questionnaire.name }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form name="newQuestion" ng-submit="saveQuestion(newQuestion.question)" class="row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Question</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-8">
+                    <textarea class="form-control" ng-model="newQuestion.question"></textarea>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success pull-right">Add Question</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form name="newTaggable" ng-submit="saveTaggable(newTaggable.taggable)" class="row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Taggable item</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" ng-model="newTaggable.taggable.name" />
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success pull-right">Add Taggable Item</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr>
+
+<h2 ng-if="questionnaire.name">{{ questionnaire.name }}</h2>
+
+<h3 ng-if="questionnaire.questions.length">Questions</h3>
+<div class="row" ng-if="questionnaire.questions.length" ng-repeat="question in questionnaire.questions">
+    <div class="col-md-8">
+        <p>{{ question }}</p>
+    </div>
+
+    <div class="col-md-4">
+        <p class="pull-right"><button class="btn btn-danger btn-xs" ng-click="removeQuestion(question)">Remove</button></p>
+    </div>
+</div>
+
+<h3 ng-if="questionnaire.taggable.length">Taggables</h3>
+<div class="row" ng-repeat="taggable in questionnaire.taggable">
+    <div class="col-md-8">
+        <p>{{ taggable.name }}</p>
+    </div>
+
+    <div class="col-md-4">
+        <p class="pull-right"><button class="btn btn-danger btn-xs" ng-click="removeTaggable(taggable)">Remove</button></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group"  ng-if="questionnaire.name">
+            <button class="btn btn-success btn-block" ng-click="saveQuestionnaire()">Update Questionnaire</button>
+        </div>
+    </div>
+</div>
+

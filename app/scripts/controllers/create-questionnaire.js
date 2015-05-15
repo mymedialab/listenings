@@ -7,7 +7,7 @@
  * # CreateListeningCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('CreateListeningCtrl', function ($scope, questionSets, ngToast) {
+angular.module('listeningsApp').controller('CreateQuestionnaireCtrl', function ($scope, questionSets, ngToast) {
     $scope.listening = {
         name: '',
         questions: [],

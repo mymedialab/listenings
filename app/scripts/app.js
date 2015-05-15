@@ -65,6 +65,10 @@ angular
         templateUrl: 'views/questionnaires/list.html',
         controller: 'ListQuestionnairesCtrl'
       })
+      .when('/questionnaire/show/:questionnaire_id', {
+        templateUrl: 'views/questionnaires/show.html',
+        controller: 'ShowQuestionnaireCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

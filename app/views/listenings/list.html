@@ -1,42 +1,55 @@
-<h1>Current Listenings</h1>
-
-<div ng-show="loading">
-    <h2>Loading Listenings</h2>
+<div class="row">
+    <div class="col-md-8">
+        <h1>Current Listenings</h1>
+    </div>
+    <div class="col-md-4">
+        <button class="pull-right btn btn-warning"
+                ng-click="sync()"
+                ng-cloak
+                ng-hide="!loading && !listenings.length"
+                ng-disabled="syncing || syncDisabled">
+            <span ng-hide="syncing || syncDisabled">Sync Now</span>
+            <span ng-show="syncing">Please Wait</span>
+            <span ng-show="syncDisabled">Sync Disabled</span>
+        </button>
+    </div>
 </div>
 
-<div ng-show="!loading && !listenings.length">
-    <h2>No listenings found</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div ng-show="loading">
+            <h2>Loading Listenings</h2>
+        </div>
+
+        <div ng-show="!loading && !listenings.length">
+            <h2>No listenings found</h2>
+        </div>
+    </div>
 </div>
 
-<button class="pull-right btn btn-warning"
-        ng-click="sync()"
-        ng-cloak
-        ng-hide="!loading && !listenings.length"
-        ng-disabled="syncing || syncDisabled">
-    <span ng-hide="syncing || syncDisabled">Sync Now</span>
-    <span ng-show="syncing">Please Wait</span>
-    <span ng-show="syncDisabled">Sync Disabled</span>
-</button>
-
-<table ng-show="!loading && listenings.length" class="table">
-    <thead>
-        <tr>
-            <th>Listening title</th>
-            <th>Location</th>
-            <th>Recorded at</th>
-            <th>Accepted</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="listening in listenings | filter:filterByRole" ng-class="{'text-muted': listening.accepted === 'N'}">
-            <td>{{ listening.questionSet }}</td>
-            <td>{{ listening.location }}</td>
-            <td>{{ listening.date }}</td>
-            <td>{{ listening.accepted }}</td>
-            <td>{{ listening.status }}</td>
-            <td><a class="btn btn-default btn-xs" ng-if="listening.accepted === 'Y'" ng-href="/#/listening/show/{{listening._id | slugify}}">view</a></td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <table ng-show="!loading && listenings.length" class="table">
+            <thead>
+                <tr>
+                    <th>Listening title</th>
+                    <th>Location</th>
+                    <th>Recorded at</th>
+                    <th>Accepted</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="listening in listenings | filter:filterByRole" ng-class="{'text-muted': listening.accepted === 'N'}">
+                    <td>{{ listening.questionSet }}</td>
+                    <td>{{ listening.location }}</td>
+                    <td>{{ listening.date }}</td>
+                    <td>{{ listening.accepted }}</td>
+                    <td>{{ listening.status }}</td>
+                    <td><a class="btn btn-default btn-xs" ng-if="listening.accepted === 'Y'" ng-href="/#/listening/show/{{listening._id | slugify}}">view</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
