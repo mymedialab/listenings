@@ -63,5 +63,13 @@ angular.module('listeningsApp').controller('ShowQuestionnaireCtrl', function($sc
               $location.path('/questionnaire/list');
           });
         };
+
+        $scope.removeQuestion = function(question) {
+
+        };
+
+        $scope.removeTaggable = function(taggable) {
+
+        };
     });
 });
