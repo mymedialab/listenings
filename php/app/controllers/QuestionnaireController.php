@@ -71,9 +71,9 @@ class QuestionnaireController extends Controller {
 	public function update($id)
 	{
 		$v = Validator::make(Input::all(), [
-			'name'      => 'string',
-			'questions' => 'array',
-			'taggable'  => 'array'
+			'name'      => 'required|string',
+			'questions' => 'required|array',
+			'taggable'  => 'required|array'
 		]);
 
 		if ($v->fails()) {
@@ -86,38 +86,29 @@ class QuestionnaireController extends Controller {
 			return Response::json([ 'error' => 'no such questionnaire found' ], 404);
 		}
 
-		if (Input::has('name')) {
-			$questionnaire->name = Input::get('name');
-		}
-
-		$questionIds = Question::where('questionnaire_id', '=', $questionnaire->id)->map(function($item) {
-			return $item->id;
-		});
-
+		$questionIds = $questionnaire->questions->lists('id');
 		Question::destroy($questionIds);
 
-		if (Input::has('questions')) {
-			foreach (Input::get('questions') as $question) {
-				Question::create([
-					'question' => $question,
-					'questionnaire_id' => $questionnaire->id
-				]);
-			}
+		foreach (Input::get('questions') as $question) {
+			Question::create(['question' => $question, 'questionnaire_id' => $questionnaire->id]);
 		}
 
-		if (Input::has('taggable')) {
-			foreach (Input::get('taggable') as $tagList) {
-				$T = TagList::firstOrNew(['name' => $tagList['name']]);
+		$tagListIds = $questionnaire->tagLists->lists('id');
+		Question::destroy($tagListIds);
 
-				if (!$T->exists) {
-					$T->save();
-					// it's a new one!
-					$questionnaire->tagLists()->save($T);
-					$questionnaire->load('tagLists');
-				}
+		foreach (Input::get('taggable') as $tagList) {
+			$T = TagList::firstOrNew(['name' => $tagList['name']]);
+
+			if ($T->exists) {
+				continue;
 			}
+
+			// it's a new one!
+			$T->save();
+			$questionnaire->tagLists()->save($T);
 		}
 
+		$questionnaire->name = Input::get('name');
 		$questionnaire->push();
 
 		return Response::json($questionnaire, 200);

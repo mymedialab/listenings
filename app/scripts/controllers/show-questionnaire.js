@@ -11,9 +11,8 @@ angular.module('listeningsApp').controller('ShowQuestionnaireCtrl', function($sc
     $scope.loading = true;
 
     questionSets.getQuestions($routeParams.questionnaire_id).then(function(doc) {
-        $scope.questionsLength = doc.questions.length;
-        $scope.questionnaire   = doc;
-        $scope.loading         = false;
+        $scope.questionnaire = doc;
+        $scope.loading       = false;
 
         $scope.saveQuestion = function(question) {
           if ($scope.questionnaire.questions.indexOf(question) !== -1) {
@@ -65,11 +64,15 @@ angular.module('listeningsApp').controller('ShowQuestionnaireCtrl', function($sc
         };
 
         $scope.removeQuestion = function(question) {
-
+          $scope.questionnaire.questions = $scope.questionnaire.questions.filter(function(item) {
+            return item !== question;
+          });
         };
 
         $scope.removeTaggable = function(taggable) {
-
+          $scope.questionnaire.taggable = $scope.questionnaire.taggable.filter(function(item) {
+            return item.name !== taggable.name;
+          });
         };
     });
 });
