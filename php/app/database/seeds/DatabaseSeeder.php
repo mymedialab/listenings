@@ -1,5 +1,7 @@
 <?php
 
+use Faker;
+
 class DatabaseSeeder extends Seeder {
 
 	/**
@@ -11,7 +13,15 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-		// $this->call('UserTableSeeder');
-	}
+		$faker = Faker\Factory::create();
 
+		$A = Area::firstOrCreate(['name' => 'Bodmin']);
+
+		for ($i = 0; $i < 20; $i++) {
+			Location::firstOrCreate([
+				'name'    => $faker->streetName,
+				'area_id' => $A->id
+			]);
+		}
+	}
 }

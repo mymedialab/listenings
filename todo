@@ -1,7 +1,7 @@
 SPRINT THE SECOND:
 
-1. Capture personal information into its own table and link to interview
 2. Add area field, change 'rough location' to 'road' and have roads belong to areas
+1. Capture personal information into its own table and link to interview
 3. Stats page, select area, road (or all) and tags (or all?) with some options an that. Display chart (chart.js?) make it look gud.
 
 ----- cap here after 4 days!
