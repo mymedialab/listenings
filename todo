@@ -1,11 +1,3 @@
-BUGS:
-
-* Edit questionnaires to add/remove/edit questions (not really a bug?)
-  - what happens to listenings recorded once a questionnaire changes?
-  - add questions/taggables only?
-
-* Tags not showing in lists
-
 SPRINT THE SECOND:
 
 1. Capture personal information into its own table and link to interview
