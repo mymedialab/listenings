@@ -68,7 +68,7 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
             res.rows.forEach(function(row) {
                 var doc = row.doc;
 
-                if (doc.id !== 'pending') {
+                if (doc.id && doc.id !== 'pending') {
                     return;
                 }
 
@@ -85,6 +85,16 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
             });
 
             return db.allDocs({ include_docs: true }); // jshint ignore:line
+        });
+    };
+
+    // mostly a debug method to get at the pending documents locally. Couldn't figure out map/reduce
+    self.pending = function() {
+        return db.allDocs({ include_docs: true }).then(function(result) {
+            return Promise.all(result.rows.filter(function (row) {
+                // just in case id is undefined
+                return !row.doc.id || row.doc.id === 'pending';
+            }));
         });
     };
 

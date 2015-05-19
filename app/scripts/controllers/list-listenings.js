@@ -34,6 +34,7 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     $scope.loading = true;
     $scope.syncing = true;
     $scope.syncDisabled = false;
+    $scope.pendings = [];
 
     listeningModel.sync().then(function(res) {
         $scope.listenings = [];
@@ -52,6 +53,12 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         $scope.loading = false;
         $scope.syncing = false;
     });
+
+    listeningModel.pending().then(function(result) {
+        $scope.pendings = result;
+    }).catch(function(err) {
+        $scope.pendings = [];
+    })
 
     $scope.filterByRole = function(element) {
         return Session.user && (Session.user.is_admin || element.userId === Session.user.id); // jshint ignore:line

@@ -56,7 +56,7 @@ class MigrateLocations extends Command {
 		Interview::all()->each(function($Interview) {
 			$Location = Location::where('name', '=', $Interview->location);
 			if ($Location->count() <= 0) {
-				\Log::error("wat!!!!\n" . $Interview->location);
+				\Log::error("This location not found despite having just been confirmed a few lines above", $Interview->toArray());
 				return;
 			}
 
