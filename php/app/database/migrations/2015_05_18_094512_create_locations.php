@@ -15,12 +15,12 @@ class CreateLocations extends Migration
 		Schema::create('locations', function(Blueprint $t)
 		{
 			$t->increments('id');
-			$t->string('name')->unique();
+			$t->string('name');
 			$t->integer('area_id')->unsigned();
 
 			$t->timestamps();
 			$t->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
-			$t->index('name');
+			$t->unique(['name', 'area_id']);
 		});
 	}
 
