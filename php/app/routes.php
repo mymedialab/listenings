@@ -33,4 +33,5 @@ Route::group(array('before' => 'auth'), function() {
   Route::resource('api/interviews', 'InterviewsController');
   Route::resource('api/questionnaires', 'QuestionnaireController');
   Route::resource('api/questions', 'QuestionController');
+  Route::resource('api/areas', 'AreaController');
 });

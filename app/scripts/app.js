@@ -45,7 +45,7 @@ angular
         templateUrl: 'views/listenings/show.html',
         controller: 'ShowListeningCtrl'
       })
-      .when('/listening/record/:location/:set/:houseno', {
+      .when('/listening/record', {
         templateUrl: 'views/listenings/record.html',
         controller: 'RecordListeningCtrl'
       })
@@ -72,6 +72,13 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  }).config(function(pouchDBProvider, POUCHDB_METHODS) {
+      // add pouchdb upsert plugin
+      var upsertMethods = {
+          upsert: 'qify',
+          putIfNotExists: 'qify'
+      };
+      pouchDBProvider.methods = angular.extend({}, POUCHDB_METHODS, upsertMethods);
   }).config(function($provide) {
     /**
      * delegate logging to our api endpoint, this is to make debugging clientside issues easier

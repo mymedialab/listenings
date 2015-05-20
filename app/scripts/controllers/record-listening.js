@@ -7,16 +7,16 @@
  * # RecordListeningCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('RecordListeningCtrl', function ($scope, $routeParams, $location, ngToast, listeningModel, questionSets) {
+angular.module('listeningsApp').controller('RecordListeningCtrl', function ($scope, $location, ngToast, listeningModel, questionSets, CurrentQuestionSetService) {
     var cloneObj = function(obj) {
         return (obj) ? JSON.parse(JSON.stringify(obj)) : null;
     };
     $scope.loading = true;
     $scope.answers = {
         type : 'interview',
-        questionSet : $routeParams.set,
-        location : $routeParams.location,
-        houseno : $routeParams.houseno
+        questionSet : CurrentQuestionSetService.set,
+        location : CurrentQuestionSetService.location,
+        houseno : CurrentQuestionSetService.houseno
     };
 
     $scope.save = function(answers) {
@@ -41,7 +41,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         listeningModel.sync();
     };
 
-    questionSets.getQuestions($routeParams.set).then(function(res) {
+    questionSets.getQuestions(CurrentQuestionSetService.set.name).then(function(res) {
         var reformattedQuestions = [];
         var questionnaire = cloneObj(res);
 

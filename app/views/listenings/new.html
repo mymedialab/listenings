@@ -4,41 +4,57 @@
 
 <div class="row">
     <form name="newListeningForm">
-        <div class="col-sm-12">
-            <div class="form-group">
-                <label for="selectedSet">Listening type</small></label>
-                <select id="selectedSet" class="form-control" ng-options="value.name for value in questionTypes" ng-model="selectedSet" required></select>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="selectedSet">Listening type</small></label>
+                    <select id="selectedSet" class="form-control" ng-options="value.name for value in questionTypes" ng-model="selectedSet" required></select>
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label for="houseno">House Number</label>
-                <input id="houseno" type="text" ng-model="houseno" class="form-control" placeholder="(optional)">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="area">Area</label>
+                    <select id="area" class="form-control" ng-options="area.name for area in areas" ng-model="selectedSet" required></select>
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-9">
-            <div class="form-group">
-                <label for="location">Rough location <small class="text-muted">e.g {{ placeholder }}</small></label>
-                <tags-input min-tags=1 max-tags=1 ng-model="location" placeholder="" ng-required>
-                    <auto-complete source="filterLocations($query)" min-length="1" highlight-matched-text=true></auto-complete>
-                </tags-input>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="houseno">House Number</label>
+                    <input id="houseno" type="text" ng-model="houseno" class="form-control" placeholder="(optional)">
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <label for="location">Road <small class="text-muted">e.g {{ placeholder }}</small></label>
+                    <tags-input min-tags=1 max-tags=1 ng-model="location" placeholder="" ng-required>
+                        <auto-complete source="filterLocations($query)" min-length="1" highlight-matched-text=true></auto-complete>
+                    </tags-input>
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-12">
-            <h3>Candidate interested?</h3>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="form-group">
-                <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-success" ng-click="createNew(location, houseno, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Candidate interested?</h3>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-danger" ng-click="recordNotInterested(location, houseno, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-success" ng-click="createNew(location, houseno, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-danger" ng-click="recordNotInterested(location, houseno, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
+                </div>
             </div>
         </div>
     </form>

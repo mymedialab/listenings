@@ -25,12 +25,12 @@ class InterviewsController extends Controller {
 		$v = Validator::make(Request::all(), [
 			'type' => 'required|string',
 			'questionSet' => 'required|string',
-			'location' => 'required',
-			'recordedAt' => 'required',
-			'questions' => 'array',
-			'taggable' => 'array',
-			'location' => 'string',
-			'houseno' => 'string',
+			'recordedAt'  => 'required',
+			'questions'   => 'array',
+			'taggable'    => 'array',
+			'location'    => 'required|string',
+			'area'        => 'required|string',
+			'houseno'     => 'string',
 		]);
 
 		if ($v->fails()) {

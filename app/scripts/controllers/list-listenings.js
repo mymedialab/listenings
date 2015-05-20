@@ -57,8 +57,9 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     listeningModel.pending().then(function(result) {
         $scope.pendings = result;
     }).catch(function(err) {
+        $log.error(err);
         $scope.pendings = [];
-    })
+    });
 
     $scope.filterByRole = function(element) {
         return Session.user && (Session.user.is_admin || element.userId === Session.user.id); // jshint ignore:line

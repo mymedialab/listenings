@@ -3,7 +3,9 @@
 angular.module('listeningsApp').service('CurrentQuestionSetService', function() {
   var currentSelected = {
       questionSet: {},
-      location: ''
+      area: {},
+      location: '',
+      houseno: ''
     };
 
   return currentSelected;
