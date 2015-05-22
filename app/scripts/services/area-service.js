@@ -11,20 +11,16 @@ angular.module('listeningsApp').service('areaService', function(pouchDB, $http, 
     var db   = pouchDB('areas');
 
     function storeArea(area) {
-        console.log(area);
-        return db.upsert(area, function(existing) {
-            console.log(existing);
-            if (!existing._id) {
-                // new record
-                area._id = area.name;
-                return area;
-            }
+        area.name      = area.name || '';
+        area._id      = area._id || area.name;
+        area.locations = area.locations || [];
 
-            area._id = existing._id;
-            return area;
-        }).then(function(res) {
-            console.log(res);
-            return Promise.resolve(res);
+        return db.put(area).catch(function() {
+            return db.get(area.name).then(function(doc) {
+                return Promise.resolve(doc);
+            });
+        }).then(function(doc) {
+            return db.put(doc, doc._id, doc._rev);
         });
     }
 
@@ -32,9 +28,7 @@ angular.module('listeningsApp').service('areaService', function(pouchDB, $http, 
         return db.get(area).then(function(doc) {
             doc.locations.push(location);
             return db.put(doc, doc._id, doc._rev);
-        }).then(function(doc) {
-            storeArea(doc);
-        }).catch(function(err) {
+        }).then(storeArea).catch(function(err) {
             $log.error(err);
         });
     }
@@ -48,23 +42,18 @@ angular.module('listeningsApp').service('areaService', function(pouchDB, $http, 
                 }));
             })
             .then(function() {
-                return db.allDocs({ include_doc: true });
+                return db.allDocs({ include_docs: true });
             })
             .catch(function(err) {
                 $log.error(err.status + ' ' + err.statusText);
             });
     }
 
-    self.all = function() {
-        return sync().then(function() {
-            return db.allDocs({ include_doc: true });
-        });
-    };
-
     self.get = function(name) {
         return db.get(name);
     };
 
+    self.all = sync;
     self.save = storeArea;
     self.sync = sync;
     self.addLocationTo = addLocationTo;

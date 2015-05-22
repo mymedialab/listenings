@@ -14,9 +14,10 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     $scope.loading = true;
     $scope.answers = {
         type : 'interview',
-        questionSet : CurrentQuestionSetService.set,
+        questionSet : CurrentQuestionSetService.selectedSet,
         location : CurrentQuestionSetService.location,
-        houseno : CurrentQuestionSetService.houseno
+        houseno : CurrentQuestionSetService.houseno,
+        area : CurrentQuestionSetService.area
     };
 
     $scope.save = function(answers) {
@@ -41,7 +42,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         listeningModel.sync();
     };
 
-    questionSets.getQuestions(CurrentQuestionSetService.set.name).then(function(res) {
+    questionSets.getQuestions(CurrentQuestionSetService.selectedSet.name).then(function(res) {
         var reformattedQuestions = [];
         var questionnaire = cloneObj(res);
 

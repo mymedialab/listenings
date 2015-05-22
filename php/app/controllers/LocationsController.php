@@ -10,6 +10,6 @@ class LocationsController extends Controller {
 	 */
 	public function index()
 	{
-		return Response::json(Interview::distinct()->select('location')->get(), 200);
+		return Response::json(['count' => Area::count(), 'areas' => Area::with('locations')->get()], 200);
 	}
 }

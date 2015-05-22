@@ -10,7 +10,7 @@ class InterviewsController extends Controller {
 	 */
 	public function index()
 	{
-		return Response::json(Interview::with('responses')->with('questionnaire')->get(), 200);
+		return Response::json(Interview::with(['responses', 'questionnaire'])->get(), 200);
 	}
 
 	/**
@@ -23,7 +23,7 @@ class InterviewsController extends Controller {
 	public function store()
 	{
 		$v = Validator::make(Request::all(), [
-			'type' => 'required|string',
+			'type'        => 'required|string',
 			'questionSet' => 'required|string',
 			'recordedAt'  => 'required',
 			'questions'   => 'array',
@@ -54,9 +54,16 @@ class InterviewsController extends Controller {
 		$interview->questionnaire_id = $Questionnaire->id;
 		$interview->type             = Input::get('type');
 
-		if (Input::has('location')) {
-			$interview->location = Input::get('location');
+		// similarly, area has to exist already
+		$area = Area::where(['name' => Input::get('area')])->first();
+		if (!$area) {
+			return Response::json(['message' => 'area "' . Input::get('area') . '" does not exist'], 400);
 		}
+
+		// although we can allow for dynamically adding new locations as they come in.
+		$location = Location::firstOrCreate(['name' => Input::get('location'), 'area_id' => $area->id]);
+		$interview->location_id = $location->id;
+
 		if (Input::has('houseno')) {
 			$interview->house_number = Input::get('houseno');
 		}

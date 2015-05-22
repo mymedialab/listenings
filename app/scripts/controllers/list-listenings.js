@@ -40,6 +40,11 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         $scope.listenings = [];
         res.rows.forEach(function(row) {
             var listening = JSON.parse(JSON.stringify(row.doc));
+
+            if (typeof(listening.questionSet) === 'object') {
+                listening.questionSet = listening.questionSet.name;
+            }
+
             listening.date = formatDate(row.doc.recordedAt);
             listening.accepted = (row.doc.type.toLowerCase() === 'rejection') ? 'N' : 'Y';
             listening.status = (row.doc.id && parseInt(row.doc.id, 10) > 0) ? 'Saved' : 'Pending';

@@ -17,7 +17,9 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label for="area">Area</label>
-                    <select id="area" class="form-control" ng-options="area.name for area in areas" ng-model="selectedSet" required></select>
+                    <select id="area" class="form-control" ng-options="area.name for area in areas" ng-model="selectedArea" ng-change="areaChanged(selectedArea)" required>
+                      <option value>Select an area</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -32,7 +34,7 @@
             <div class="col-sm-9">
                 <div class="form-group">
                     <label for="location">Road <small class="text-muted">e.g {{ placeholder }}</small></label>
-                    <tags-input min-tags=1 max-tags=1 ng-model="location" placeholder="" ng-required>
+                    <tags-input min-tags=1 max-tags=1 ng-model="location" placeholder="" ng-required ng-disabled="selectedArea" replace-spaces-with-dashes="false">
                         <auto-complete source="filterLocations($query)" min-length="1" highlight-matched-text=true></auto-complete>
                     </tags-input>
                 </div>
@@ -48,12 +50,12 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-success" ng-click="createNew(location, houseno, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
+                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-success" ng-click="createNew(selectedArea, location, houseno, selectedSet)"><span class="glyphicon glyphicon-tick"></span> Yes</button>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-danger" ng-click="recordNotInterested(location, houseno, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
+                    <button ng-disabled="newListeningForm.$invalid" class="btn btn-block btn-danger" ng-click="recordNotInterested(selectedArea, location, houseno, selectedSet)"><span class="glyphicon glyphicon-cross"></span> No</button>
                 </div>
             </div>
         </div>

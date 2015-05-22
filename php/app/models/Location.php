@@ -6,7 +6,7 @@
  */
 class Location extends \Eloquent
 {
-  protected $fillable = ['name'];
+  protected $fillable = ['name', 'area_id'];
 
   public function area()
   {

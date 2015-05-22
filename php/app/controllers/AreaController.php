@@ -10,7 +10,7 @@ class AreaController extends \Controller {
 	 */
 	public function index()
 	{
-		$Areas = Area::all();
+		$Areas = Area::with('locations')->get();
 		return Response::json(['count' => $Areas->count(), 'areas' => $Areas], 200);
 	}
 

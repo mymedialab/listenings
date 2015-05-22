@@ -19,6 +19,10 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
         details._id        = Session.user.id + '/' + now;
         details.userId     = Session.user.id;
 
+        if (typeof(details.questionSet) === 'object') {
+            details.questionSet = details.questionSet.name;
+        }
+
         return db.put(details);
     };
 
@@ -64,13 +68,20 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
 
         // send what we've got to the server
         // @todo batch submit these
+        // @todo write a map/reduce function to query by id: "pending" rather than clumsy map, see self.pending
         return db.allDocs({ include_docs: true }).then(function(res) {  // jshint ignore:line
-            res.rows.forEach(function(row) {
+            return Promise.all(res.rows.map(function(row) {
                 var doc = row.doc;
 
                 if (doc.id && doc.id !== 'pending') {
                     return;
                 }
+
+                if (typeof(doc.questionSet) === 'object') {
+                    doc.questionSet = doc.questionSet.name;
+                }
+
+                doc.area = doc.area || '';
 
                 $http.post('/api/interviews', doc).success(function(data) {
                     doc.id          = data.id;
@@ -81,10 +92,14 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
                     });
                 }).error(function(data, status) {
                     $log.error('Failed to send listenings to the server with status: ' + status, data);
+                }).then(function() {
+                    return db.allDocs({ include_docs: true }); // jshint ignore:line
                 }); // @todo: really I want to return this promise to let my controller generate toasts and stuff.
+            })).then(function() {
+                return db.allDocs({ include_docs: true }); // jshint ignore:line
+            }).catch(function(err) {
+                $log.error(err);
             });
-
-            return db.allDocs({ include_docs: true }); // jshint ignore:line
         });
     };
 
