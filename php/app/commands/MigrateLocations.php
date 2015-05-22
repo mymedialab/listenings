@@ -43,6 +43,10 @@ class MigrateLocations extends Command {
 
 		// Ensure current locations are saved.
 		foreach(array_unique(Interview::where('location_id', '=', '')->lists('location')) as $location) {
+			if (strlen($location) === 0) {
+				continue; // don't want to clobber real locations
+			}
+
 			$L = Location::firstOrNew(['name' => $location]);
 
 			if ($L->exists) {
