@@ -8,13 +8,12 @@ class TagList extends \Eloquent {
   public $timestamps = false;
   protected $table = 'tag_list';
   protected $fillable = ['name'];
-  protected $touches = ['Questionnaire'];
 
   public function tags()
   {
       return $this->hasMany('Tag');
   }
-  public function questionaire()
+  public function questionnaire()
   {
       return $this->belongsToMany('Questionnaire', 'questionnaire_tag_lists');
   }

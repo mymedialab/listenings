@@ -95,7 +95,6 @@ class QuestionnaireController extends Controller {
 
 		$tagListIds = $questionnaire->tagLists->lists('id');
 		$questionnaire->tagLists()->detach($tagListIds);
-		TagList::destroy($tagListIds);
 
 		foreach (Input::get('taggable') as $tagList) {
 			$T = TagList::firstOrNew(['name' => $tagList['name']]);
@@ -109,8 +108,10 @@ class QuestionnaireController extends Controller {
 		}
 
 		$questionnaire->name = Input::get('name');
-
 		$questionnaire->push();
+
+		// if these are modified they won't be shown...
+		$questionnaire->load('tagLists', 'tagLists.tags', 'questions');
 
 		return Response::json($this->reformatTagsAndQuestions($questionnaire), 200);
 	}
@@ -134,7 +135,7 @@ class QuestionnaireController extends Controller {
 			return [
 				'id' => $tagList['id'],
 				'name' => $tagList['name'],
-				'existing' => array_map(
+				'existing' => (!isset($tagList['tags'])) ? [] : array_map(
 					function($item) {
 						return $item['name'];
 					},
