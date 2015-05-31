@@ -15,7 +15,7 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($log, $
     $scope.houseno = '';
     $scope.locations = [];
 
-    areaService.all().then(function(res) {
+    areaService.getAll().then(function(res) {
         $scope.areas = res.rows.map(function(row) { return row.doc; });
     }).catch(function() {
         $scope.areas = [];
