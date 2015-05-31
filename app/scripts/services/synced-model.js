@@ -20,13 +20,13 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
             remoteLast = new Date(remote.last_updated);
 
         if (!isNaN(localLast) && !isNaN(remoteLast)) {
-            return (remoteLast.getTime() > localLast.getTime());
+            return (remoteLast.getTime() > localLast.getTime()); // if equal, return false!
         } else if (!isNaN(remoteLast)) {
-            /* We don't know when the local was last updated, so assume it's junk. Remote seems ok. */
+            /* We don't know when the local was last updated, so assume it's oldest. Remote seems ok. */
             return true;
         }
 
-        return false;
+        return false; // if neither have dates, they were created prior to this object working, so let them be.
     }
 
     function localModified(remote, local) {
@@ -34,13 +34,13 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
             remoteLast = new Date(remote.last_updated);
 
         if (!isNaN(localLast) && !isNaN(remoteLast)) {
-            return (localLast.getTime() > remoteLast.getTime());
+            return (localLast.getTime() > remoteLast.getTime()); // if equal, return false!
         } else if (!isNaN(localLast)) {
-            /* We don't know when the remote was last updated, so assume it's junk. Local seems ok. */
+            /* We don't know when the remote was last updated, so assume it's oldest. Local seems ok. */
             return true;
         }
 
-        return false;
+        return false; // if neither have dates, they were created prior to this object working, so let them be.
     }
 
     /**
@@ -132,12 +132,14 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                         row = transformForLocal(row);
 
                         found = existing.some(function(current) {
-                            if (current.doc.id === row.id && current.doc) {
+                            if (current.doc.id === row.id) {
                                 if (remoteModified(row, current.doc)) {
+                                    // overwrite local with remote
                                     row._id = current.doc._id;
-                                    row._rev = current.doc.rev;
+                                    row._rev = current.doc._rev;
                                     docs.push(row);
                                 } else if (localModified(row, current.doc)) {
+                                    // push changes.
                                     updateRemote(transformForServer(current.doc));
                                 }
                                 return true; // found. Stop looking

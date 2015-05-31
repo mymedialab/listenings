@@ -108,6 +108,7 @@ class QuestionnaireController extends Controller {
 		}
 
 		$questionnaire->name = Input::get('name');
+		$questionnaire->touch();
 		$questionnaire->push();
 
 		// if these are modified they won't be shown...
