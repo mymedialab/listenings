@@ -31,21 +31,43 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
             lastSynced = null,
             self = this,
 
-            // trimDb = function() {
-            //     console.log('TODO: trim DB');
-            //     // get all id's from server
-            //     // get all docs from pouchDB
-            //     // if pouchdoc is not pending AND pouchdoc.id is NOT in the MySQL list, delete it.
-            // },
+            trimDb = function(remoteRows, localRows) {
+                var ids = remoteRows.map(function(row) {
+                    return row.id;
+                });
+
+                localRows.filter(function(local) {
+                    if (local.doc.id === 'pending') {
+                        // This row not yet synced.
+                        return true;
+                    } else if (ids.indexOf(local.doc.id) !== -1) {
+                        // found this row. Any extra need de-duping
+                        ids.splice(ids.indexOf(local.doc.id), 1);
+                        return true;
+                    } else {
+                        db.remove(local.doc);
+                        return false;
+                    }
+                });
+
+                return localRows;
+            },
 
             pushAllPending = function() {
                 return db.allDocs({ include_docs: true }).then(function(docs) {
                     return $q.all(docs.rows.forEach(function(doc) {
+                        doc = doc.doc;
                          if (doc.id && doc.id !== 'pending') {
                             return;
                         }
                         doc = transformForServer(doc);
-                        return $http.post(url, doc);
+                        return $http.post(url, doc).then(function(response) {
+                            if (response.data && response.data.id) {
+                                console.log(doc);
+                                doc.id = response.data.id;
+                                return db.put(doc);
+                            }
+                        });
                     }));
                 });
             },
@@ -56,19 +78,20 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
 
                 return $http.get(url, {timeout: 1000}).then(function(res) {
                     remote = res.data;
-                    return db.allDocs({});
-                }).then(function(existing) {
+                    return db.allDocs({include_docs: true}); // jshint ignore:line
+                }).then(function(localResponse) {
+                    var existing = trimDb(remote, localResponse.rows);
                     // We loop through remote rows and reformat them as local.
                     // Then, if a local row exists, we overwrite it in the local DB,
                     // if it's new, we insert it.
                     remote.forEach(function(row) {
                         row = transformForLocal(row);
 
-                        existing.rows.some(function(current) {
-                            if (current.id === row.id) {
-                                row._id = current._id;
-                                row._rev = current.value.rev;
-                                return true;
+                        existing.some(function(current) {
+                            if (current.doc.id === row.id) {
+                                row._id = current.doc._id;
+                                row._rev = current.doc.rev;
+                                return true; // found. Stop looking
                             }
                         });
 
@@ -90,7 +113,6 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                 dirty = false;
                 lastSynced = now;
                 return $q.all([
-                    // trimDb(),
                     pushAllPending(),
                     updateShared()
                 ]);
