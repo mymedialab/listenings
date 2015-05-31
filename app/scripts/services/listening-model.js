@@ -4,9 +4,32 @@
  * This should be sufficient to make interviews unique
  * a double-bounce save for instance will resolve to the same document
  */
-angular.module('listeningsApp').service('listeningModel', function(pouchDB, $http, Session, $log) {
+angular.module('listeningsApp').service('listeningModel', function(syncedModel, Session) {
     'use strict';
-    var db   = pouchDB('interviews');
+    var transformForServer = function(localRow) {
+        localRow.area = localRow.area || '';
+        if (typeof(localRow.questionSet) === 'object') {
+            localRow.questionSet = localRow.questionSet.name;
+        }
+        return localRow;
+    };
+    var transformForLocal = function(remoteRow) {
+        var localRow = {
+            id:           remoteRow.id,
+            type:         remoteRow.type,
+            location:     remoteRow.location,
+            houseno:      remoteRow.houseno,
+            questions:    remoteRow.responses,
+            questionSet:  remoteRow.questionnaire && remoteRow.questionnaire.name || 'unknown',
+            recordedAt:   new Date(remoteRow.date),
+            last_updated: remoteRow.updated_at, // jshint ignore:line
+            userId:       remoteRow.interviewer_id // jshint ignore:line
+        };
+
+        return localRow;
+    };
+
+    var model = syncedModel.create('interviews', '/api/interviews/', 'interviews', transformForServer, transformForLocal);
     var self = {};
 
     self.storeListening = function(details) {
@@ -15,102 +38,40 @@ angular.module('listeningsApp').service('listeningModel', function(pouchDB, $htt
         var now  = Math.floor(time / 1000);
 
         details.recordedAt = now;
-        details.id         = 'pending';
-        details._id        = Session.user.id + '/' + now;
         details.userId     = Session.user.id;
 
         if (typeof(details.questionSet) === 'object') {
             details.questionSet = details.questionSet.name;
         }
 
-        return db.put(details);
+        return model.store(details);
     };
 
+    /**
+     * @deprecated use getAll instead
+     */
     self.getAllListenings = function () {
-        return db.allDocs({ include_docs: true }); // jshint ignore:line
+        return model.getAall();
+    };
+    self.getAll = function () {
+        return model.getAall();
     };
 
+    /**
+     * @deprecated use get instead
+     */
     self.find = function(id) {
-        return db.get(id);
+        return model.get(id);
+    };
+    self.get = function(id) {
+        return model.get(id);
     };
 
     /**
      * work out what needs syncing and make it so
      */
     self.sync = function() {
-        $http.get('/api/interviews').success(function(data) {
-            data.forEach(function(row) {
-                var id, doc = {};
-                var date = new Date(row.date);
-                // adjust the date for timezone, this ensures that times match the stored (UTC) _id values
-                var dateUtc = Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 1000);
-
-                id = row.interviewer_id + '/' + dateUtc; // jshint ignore:line
-
-                doc = {
-                    _id: id,
-                    id: row.id,
-                    type: row.type,
-                    questionSet: row.questionnaire && row.questionnaire.name || 'unknown',
-                    location: row.location,
-                    houseno: row.houseno,
-                    questions: row.responses,
-                    recordedAt: date,
-                    last_updated: row.updated_at, // jshint ignore:line
-                    userId: row.interviewer_id // jshint ignore:line
-                };
-
-                db.put(doc);
-            });
-        }).error(function(data, status) {
-            $log.error('Failed to retrieve listenings from the server with status: ' + status, data);
-        });
-
-        // send what we've got to the server
-        // @todo batch submit these
-        // @todo write a map/reduce function to query by id: "pending" rather than clumsy map, see self.pending
-        return db.allDocs({ include_docs: true }).then(function(res) {  // jshint ignore:line
-            return Promise.all(res.rows.map(function(row) {
-                var doc = row.doc;
-
-                if (doc.id && doc.id !== 'pending') {
-                    return;
-                }
-
-                if (typeof(doc.questionSet) === 'object') {
-                    doc.questionSet = doc.questionSet.name;
-                }
-
-                doc.area = doc.area || '';
-
-                $http.post('/api/interviews', doc).success(function(data) {
-                    doc.id          = data.id;
-                    doc.last_synced = data.updated_at; // jshint ignore:line
-
-                    db.put(doc, doc._id, (new Date().toISOString())).catch(function(err) {
-                        $log.error('failed to save ' + doc._id + ', ' + err);
-                    });
-                }).error(function(data, status) {
-                    $log.error('Failed to send listenings to the server with status: ' + status, data);
-                }).then(function() {
-                    return db.allDocs({ include_docs: true }); // jshint ignore:line
-                }); // @todo: really I want to return this promise to let my controller generate toasts and stuff.
-            })).then(function() {
-                return db.allDocs({ include_docs: true }); // jshint ignore:line
-            }).catch(function(err) {
-                $log.error(err);
-            });
-        });
-    };
-
-    // mostly a debug method to get at the pending documents locally. Couldn't figure out map/reduce
-    self.pending = function() {
-        return db.allDocs({ include_docs: true }).then(function(result) {
-            return Promise.all(result.rows.filter(function (row) {
-                // just in case id is undefined
-                return !row.doc.id || row.doc.id === 'pending';
-            }));
-        });
+        return model.forceSync().then(model.getAll);
     };
 
     return self;

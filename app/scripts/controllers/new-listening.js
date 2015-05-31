@@ -32,8 +32,6 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($log, $
           area = area.name;
         }
 
-        console.log(arguments);
-
         rejection = {
             type: 'rejection',
             area: area,

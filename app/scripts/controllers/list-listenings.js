@@ -34,7 +34,6 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
     $scope.loading = true;
     $scope.syncing = true;
     $scope.syncDisabled = false;
-    $scope.pendings = [];
 
     listeningModel.sync().then(function(res) {
         $scope.listenings = [];
@@ -57,13 +56,6 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         $scope.listenings = [];
         $scope.loading = false;
         $scope.syncing = false;
-    });
-
-    listeningModel.pending().then(function(result) {
-        $scope.pendings = result;
-    }).catch(function(err) {
-        $log.error(err);
-        $scope.pendings = [];
     });
 
     $scope.filterByRole = function(element) {
