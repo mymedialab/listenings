@@ -174,7 +174,13 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
 
 
         self.getAll = function () {
-            return db.allDocs({ include_docs: true }); // jshint ignore:line
+            if (lastSynced === null) {
+                return sync().then(function() {
+                    return db.allDocs({ include_docs: true }); // jshint ignore:line
+                });
+            } else {
+                return db.allDocs({ include_docs: true }); // jshint ignore:line
+            }
         };
 
         self.get = function (id) {
