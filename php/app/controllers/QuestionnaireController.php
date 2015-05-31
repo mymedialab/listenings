@@ -10,7 +10,7 @@ class QuestionnaireController extends Controller {
 	public function index()
 	{
 		$Questionnaire = Questionnaire::with('questions', 'tagLists', 'tagLists.tags')->get();
-		return Response::json($this->reformatTagsAndQuestions($Questionnaire), 200);
+		return Response::json($this->reformatMultiple($Questionnaire), 200);
 	}
 
 	/**
@@ -27,7 +27,7 @@ class QuestionnaireController extends Controller {
 			return Response::json([ 'error' => 'no such questionnaire found' ], 404);
 		}
 
-		return Response::json($questionnaire, 200);
+		return Response::json($this->reformatTagsAndQuestions($questionnaire), 200);
 	}
 
 	public function store()
@@ -62,7 +62,7 @@ class QuestionnaireController extends Controller {
 
 		$questionnaire->push();
 
-		return Response::json($questionnaire, 201);
+		return Response::json($this->reformatTagsAndQuestions($questionnaire), 201);
 	}
 
 	/**
@@ -94,58 +94,61 @@ class QuestionnaireController extends Controller {
 		}
 
 		$tagListIds = $questionnaire->tagLists->lists('id');
-		Question::destroy($tagListIds);
+		$questionnaire->tagLists()->detach($tagListIds);
+		TagList::destroy($tagListIds);
 
 		foreach (Input::get('taggable') as $tagList) {
 			$T = TagList::firstOrNew(['name' => $tagList['name']]);
 
+			$questionnaire->tagLists()->save($T);
 			if ($T->exists) {
 				continue;
 			}
-
 			// it's a new one!
 			$T->save();
-			$questionnaire->tagLists()->save($T);
 		}
 
 		$questionnaire->name = Input::get('name');
+
 		$questionnaire->push();
 
-		return Response::json($questionnaire, 200);
+		return Response::json($this->reformatTagsAndQuestions($questionnaire), 200);
 	}
 
 	/**
 	 * Need to rename tag_lists to taggable for the js
 	 */
-	protected function reformatTagsAndQuestions($Questionnaires)
+	protected function reformatMultiple($Questionnaires)
 	{
 		$questionnaires = [];
-
 		foreach ($Questionnaires as $Questionnaire) {
-			$questionnaire = $Questionnaire->toArray();
-
-			$questionnaire['taggable'] = array_map(function($tagList) {
-				return [
-					'id' => $tagList['id'],
-					'name' => $tagList['name'],
-					'existing' => array_map(
-						function($item) {
-							return $item['name'];
-						},
-						$tagList['tags']
-					)
-				];
-			}, $questionnaire['tag_lists']);
-
-			$questionnaire['questions'] = array_map(function($question) {
-				return $question['question'];
-			}, $questionnaire['questions']);
-
-			unset($questionnaire['tag_lists']);
-
-			$questionnaires[] = $questionnaire;
+			$questionnaires[] = $this->reformatTagsAndQuestions($Questionnaire);
 		}
-
 		return $questionnaires;
+	}
+	protected function reformatTagsAndQuestions($Questionnaire)
+	{
+		$questionnaire = $Questionnaire->toArray();
+
+		$questionnaire['taggable'] = array_map(function($tagList) {
+			return [
+				'id' => $tagList['id'],
+				'name' => $tagList['name'],
+				'existing' => array_map(
+					function($item) {
+						return $item['name'];
+					},
+					$tagList['tags']
+				)
+			];
+		}, $questionnaire['tag_lists']);
+
+		$questionnaire['questions'] = array_map(function($question) {
+			return $question['question'];
+		}, $questionnaire['questions']);
+
+		unset($questionnaire['tag_lists']);
+
+		return $questionnaire;
 	}
 }

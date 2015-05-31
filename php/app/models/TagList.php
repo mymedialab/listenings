@@ -8,6 +8,7 @@ class TagList extends \Eloquent {
   public $timestamps = false;
   protected $table = 'tag_list';
   protected $fillable = ['name'];
+  protected $touches = ['Questionnaire'];
 
   public function tags()
   {
