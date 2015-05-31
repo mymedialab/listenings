@@ -61,3 +61,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 tags-input .host {
   margin-top: 0;
 }
+
+// make the invalid thingy not display on page load. GIVE ME A CHANCE TO FILL IT OUT!
+tags-input.ng-invalid.ng-untouched .tags {
+  box-shadow: none;
+}
