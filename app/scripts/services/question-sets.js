@@ -11,7 +11,7 @@ angular.module('listeningsApp').service('questionSets', function(syncedModel) {
         return details;
     };
 
-    var model = syncedModel.create('questionnaires', '/api/questionnaires', 'questionnaires', transformForServer, transformForLocal);
+    var model = syncedModel.create('questionnaires', '/api/questionnaires/', 'questionnaires', transformForServer, transformForLocal);
     var self = {};
 
     function tranformTaggables(fromView) {

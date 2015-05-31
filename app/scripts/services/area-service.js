@@ -6,7 +6,7 @@
 // }
 angular.module('listeningsApp').service('areaService', function(syncedModel) {
     'use strict';
-    var model = syncedModel.create('areas', '/api/areas', 'areas');
+    var model = syncedModel.create('areas', '/api/areas/', 'areas');
     var self = {};
 
     function store(area) {
