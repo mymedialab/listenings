@@ -3,9 +3,9 @@
  * when a connection is available.
  *
  * @param  {[type]} pouchDB [description]
- * @param  {[type]} $http   [description]
  * @param  {[type]} Session [description]
- * @param  {[type]} $log)   {                   var Model [description]
+ * @param  {[type]} $http   [description]
+ * @param  {[type]} $q      [description]
  * @return {[type]}         [description]
  */
 angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session, $http, $q) {
