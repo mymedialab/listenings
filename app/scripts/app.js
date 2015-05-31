@@ -69,6 +69,10 @@ angular
         templateUrl: 'views/questionnaires/show.html',
         controller: 'ShowQuestionnaireCtrl'
       })
+      .when('/areas', {
+        templateUrl: 'views/areas/manage.html',
+        controller: 'AreaCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
