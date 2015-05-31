@@ -18,10 +18,10 @@ angular.module('listeningsApp').service('listeningModel', function(syncedModel, 
             id:           remoteRow.id,
             type:         remoteRow.type,
             location:     remoteRow.location,
-            houseno:      remoteRow.houseno,
+            houseno:      remoteRow.house_number,
             questions:    remoteRow.responses,
             questionSet:  remoteRow.questionnaire && remoteRow.questionnaire.name || 'unknown',
-            recordedAt:   new Date(remoteRow.date),
+            recordedAt:   Math.floor(new Date(remoteRow.date).getTime() / 1000),
             last_updated: remoteRow.updated_at, // jshint ignore:line
             userId:       remoteRow.interviewer_id // jshint ignore:line
         };

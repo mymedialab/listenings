@@ -15,6 +15,34 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
         return Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 1000);
     }
 
+    function remoteModified(remote, local) {
+        var localLast = new Date(local.last_updated),
+            remoteLast = new Date(remote.last_updated);
+
+        if (!isNaN(localLast) && !isNaN(remoteLast)) {
+            return (remoteLast.getTime() > localLast.getTime());
+        } else if (!isNaN(remoteLast)) {
+            /* We don't know when the local was last updated, so assume it's junk. Remote seems ok. */
+            return true;
+        }
+
+        return false;
+    }
+
+    function localModified(remote, local) {
+        var localLast = new Date(local.last_updated),
+            remoteLast = new Date(remote.last_updated);
+
+        if (!isNaN(localLast) && !isNaN(remoteLast)) {
+            return (localLast.getTime() > remoteLast.getTime());
+        } else if (!isNaN(localLast)) {
+            /* We don't know when the remote was last updated, so assume it's junk. Local seems ok. */
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * This is the generic model which can be created by the parent factory.
      *
@@ -31,6 +59,10 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
             lastSynced = null,
             self = this,
 
+            /**
+             * This is fairly easy. if there are entries in local, not in remote then they've been deleted so
+             * clear them away.
+             */
             trimDb = function(remoteRows, localRows) {
                 var ids = remoteRows.map(function(row) {
                     return row.id;
@@ -41,7 +73,7 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                         // This row not yet synced.
                         return true;
                     } else if (ids.indexOf(local.doc.id) !== -1) {
-                        // found this row. Any extra need de-duping
+                        // found this row. Any extra need de-duping. Could cause data loss, but tough.
                         ids.splice(ids.indexOf(local.doc.id), 1);
                         return true;
                     } else {
@@ -53,6 +85,9 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                 return localRows;
             },
 
+            /**
+             * This is dead easy, anything pending is an insert, so send it off.
+             */
             pushAllPending = function() {
                 return db.allDocs({ include_docs: true }).then(function(docs) {
                     return $q.all(docs.rows.forEach(function(doc) {
@@ -63,7 +98,6 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                         doc = transformForServer(doc);
                         return $http.post(url, doc).then(function(response) {
                             if (response.data && response.data.id) {
-                                console.log(doc);
                                 doc.id = response.data.id;
                                 return db.put(doc);
                             }
@@ -72,14 +106,24 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                 });
             },
 
+            updateRemote = function(data) {
+                return $http.put(url + data.id, data);
+            },
+
+            /**
+             * This is pretty hard. If the record exists in both, we either want to leave it, pull changes or push
+             * changes.
+             */
             updateShared = function() {
                 var remote = [],
                     docs = [];
 
+                /* first, get stuff. */
                 return $http.get(url, {timeout: 1000}).then(function(res) {
                     remote = res.data;
                     return db.allDocs({include_docs: true}); // jshint ignore:line
                 }).then(function(localResponse) {
+                    var found;
                     var existing = trimDb(remote, localResponse.rows);
                     // We loop through remote rows and reformat them as local.
                     // Then, if a local row exists, we overwrite it in the local DB,
@@ -87,15 +131,23 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                     remote.forEach(function(row) {
                         row = transformForLocal(row);
 
-                        existing.some(function(current) {
-                            if (current.doc.id === row.id) {
-                                row._id = current.doc._id;
-                                row._rev = current.doc.rev;
+                        found = existing.some(function(current) {
+                            if (current.doc.id === row.id && current.doc) {
+                                if (remoteModified(row, current.doc)) {
+                                    row._id = current.doc._id;
+                                    row._rev = current.doc.rev;
+                                    docs.push(row);
+                                } else if (localModified(row, current.doc)) {
+                                    updateRemote(transformForServer(current.doc));
+                                }
                                 return true; // found. Stop looking
                             }
                         });
 
-                        docs.push(row);
+                        // if we didn't find the row in local, we need to add it.
+                        if (!found) {
+                            docs.push(row);
+                        }
                     });
 
                     return db.bulkDocs(docs);
@@ -131,6 +183,7 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
             /* _id is the local pouchDb identifier, and id is the canonical MySQL identifier. We may not be able to get that for a while, so it is pending. */
             details._id = details._id || Session.user.id + '/' + dateUtc();
             details.id = details.id || 'pending';
+            details.last_updated = new date().getTime();
             dirty = true;
             return db.put(details);
         };
