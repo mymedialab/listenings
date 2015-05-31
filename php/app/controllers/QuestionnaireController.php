@@ -100,11 +100,10 @@ class QuestionnaireController extends Controller {
 			$T = TagList::firstOrNew(['name' => $tagList['name']]);
 
 			$questionnaire->tagLists()->save($T);
-			if ($T->exists) {
-				continue;
+			if (!$T->exists) {
+				// it's a new one!
+				$T->save();
 			}
-			// it's a new one!
-			$T->save();
 		}
 
 		$questionnaire->name = Input::get('name');
