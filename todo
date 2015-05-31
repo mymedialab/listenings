@@ -1,9 +1,16 @@
+MY TODOS:
+
+1. Can I make this less confusing? Reconcile list / get / sync functions?
+2. Make at least 1 and 2 from sprint 2 work?
+3. I used pouchDB because if that one guy using it in that one demo, but without a pouchdb backend, most of it is cruft. CAn we find something better?
+
 SPRINT THE SECOND:
 
 2. Add area field, change 'rough location' to 'road' and have roads belong to areas
   - FOR RELEASE:
-    Apply migrations (this will add areas, locations and location_id to the Interview model)
+    Apply migrations (this will add areas, locations and location_id to the Interview model) `php artisan migrate`
     Run artisan command to migrate current locations. This will convert existing locations to locations in the 'Bodmin' area and link them to the interviews.
+    `php artisan command:migrate_locations`
     AFTERWARDS:
     create a migration to remove (or rename?) the location column from interviews. It's now defunct and only likely to clash with the location associations
 

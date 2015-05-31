@@ -15,17 +15,6 @@ class AreaController extends \Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 * GET /area/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 * POST /area
 	 *
@@ -75,18 +64,6 @@ class AreaController extends \Controller {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 * GET /area/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 * PUT /area/{id}
 	 *
@@ -124,6 +101,6 @@ class AreaController extends \Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+
 	}
 }
