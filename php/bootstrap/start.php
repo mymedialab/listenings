@@ -24,11 +24,13 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function() use ($app) {
+    if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'listen.mymedialab.co.uk') {
+        return 'staging';
+    }
 
-	'local' => array('homestead'),
-
-));
+    return 'local';
+});
 
 /*
 |--------------------------------------------------------------------------
