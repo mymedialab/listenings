@@ -8,12 +8,15 @@
  * Controller of the listeningsApp
  */
 angular.module('listeningsApp').controller('AreaCtrl', function ($scope, areaService, ngToast) {
+    function refreshAreas() {
+        areaService.getAll().then(function(res) {
+            $scope.areas = res.rows.map(function(row) { return row.doc;});
+        });
+    }
+
     $scope.newArea = '';
     $scope.areas = [{name: "loading..."}];
-
-    areaService.getAll().then(function(res) {
-        $scope.areas = res.rows.map(function(row) { return row.doc;});
-    });
+    refreshAreas();
 
     $scope.addNew = function(name) {
         if (typeof(name) !== 'string' || !name.length) {
@@ -22,6 +25,7 @@ angular.module('listeningsApp').controller('AreaCtrl', function ($scope, areaSer
         }
         areaService.store({name: name, locations:[]}).then(function() {
             ngToast.create({content: 'New area created.' , className: 'success'});
+            refreshAreas();
         }).catch(function() {
             ngToast.create({content: 'Area creation failed.' , className: 'danger'});
         });
