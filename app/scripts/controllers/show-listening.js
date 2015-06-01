@@ -1,12 +1,15 @@
 /*jshint camelcase: false */
 'use strict';
-angular.module('listeningsApp').controller('ShowListeningCtrl', function ($scope, $routeParams, Session, ngToast, listeningModel) {
+angular.module('listeningsApp').controller('ShowListeningCtrl', function ($scope, $routeParams, Session, ngToast, listeningModel, $filter) {
+    var listeningId = $filter('unslugify')($routeParams.listening_id);
     $scope.allowedUser = false;
+    $scope.fetchError = false;
 
-    listeningModel.find($routeParams.listening_id.replace(/-/, '/')).then(function(doc) {
+    listeningModel.find(listeningId).then(function(doc) {
         $scope.interview = doc;
         $scope.allowedUser = Session.user && (Session.user.is_admin || doc.userId === Session.user.id);
     }).catch(function() {
+        $scope.fetchError = true;
         ngToast.create({content: 'Failed to load listening' , className: 'danger'});
     });
 

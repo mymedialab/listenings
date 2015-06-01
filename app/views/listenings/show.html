@@ -22,6 +22,10 @@
     </dl>
 </div>
 
-<div ng-hide="allowedUser">
+<div ng-hide="allowedUser || fetchError">
     <p>Permission denied</p>
+</div>
+
+<div ng-show="fetchError">
+    <p>Could not load requested data</p>
 </div>

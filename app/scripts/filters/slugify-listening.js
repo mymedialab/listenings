@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('listeningsApp').filter('slugify', function() {
-  return function(input) {
-    if (!input) {
-      return;
+  return function( str ) {
+    if (!str || typeof(str) !== 'string') {
+      return str;
     }
-    return input.replace('/', '-');
-  };
+    return window.btoa(unescape(encodeURIComponent( str )));
+  }
 });
