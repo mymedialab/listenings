@@ -26,12 +26,12 @@ Route::controller('api/password', 'RemindersController');
 
 Route::post('api/user/available', 'UserController@available');
 Route::post('api/user/changepassword', 'UserController@changePassword');
-Route::resource('api/user', 'UserController', ['only' => ['store', 'update', 'show']]);
 
 Route::group(array('before' => 'auth'), function() {
   Route::resource('api/interviews', 'InterviewsController');
   Route::resource('api/questionnaires', 'QuestionnaireController');
   Route::resource('api/questions', 'QuestionController');
   Route::resource('api/areas', 'AreaController');
+  Route::resource('api/user', 'UserController', ['only' => ['index', 'store', 'update', 'show']]);
   Route::get('api/locations', 'AreaController@index');
 });

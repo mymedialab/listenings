@@ -10,6 +10,16 @@ use \User;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        $User = Auth::user();
+        if (!$User || !$User->is_admin) {
+            return Response::json([], 401);
+        }
+
+        return Response::json(User::all(), 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

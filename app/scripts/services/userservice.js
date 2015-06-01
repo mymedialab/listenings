@@ -26,6 +26,10 @@ angular.module('listeningsApp').factory('UserService', function ($http, ngToast)
         });
     };
 
+    self.list = function() {
+      return $http.get('/api/user');
+    }
+
     return self;
   }
 );

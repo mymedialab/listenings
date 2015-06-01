@@ -53,9 +53,9 @@ angular
         templateUrl: 'views/admin.html',
         controller: 'AdminCtrl'
       })
-      .when('/adduser', {
-        templateUrl: 'views/add-user.html',
-        controller: 'AddUserCtrl'
+      .when('/users', {
+        templateUrl: 'views/users/manage.html',
+        controller: 'UserCtrl'
       })
       .when('/questionnaire/create', {
         templateUrl: 'views/questionnaires/create.html',

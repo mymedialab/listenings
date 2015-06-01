@@ -1,10 +1,32 @@
 <h1>Administration</h1>
+<h4>Note: You can only manage users whilst online.</h4>
 
 <div ng-if="!isAdmin()">
     <p>Permission denied.</p>
 </div>
 
 <div ng-if="isAdmin()">
+
+    <h3>Current users</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Is admin?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="user in users">
+                <td>{{user.name}}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.username }}</td>
+                <td ng-if="user.is_admin">Yes</td>
+                <td ng-if="!user.is_admin">-</td>
+            </tr>
+        </tbody>
+    </table>
 
     <form ng-submit="addNew(newUser)">
         <h3>Add a new user</h3>
