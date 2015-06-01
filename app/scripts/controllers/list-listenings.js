@@ -7,7 +7,7 @@
  * # ListListeningsCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session, $log) {
+angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope, ngToast, listeningModel, Session) {
     var syncLimit = 5, presses = 0;
 
     function padZeros(str) {
@@ -85,8 +85,6 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
         listeningModel.sync().then(function() {
             $scope.syncing = false;
         }).catch(function(err) {
-            $log.error('failed to sync manually', err);
-
             ngToast.create({
               content: 'Failed to sync all records',
               className: 'danger'

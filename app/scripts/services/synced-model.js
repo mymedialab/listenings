@@ -96,6 +96,7 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
                             return;
                         }
                         doc = transformForServer(doc);
+                        // @todo if we've been offline for a while there may be a few of these. Can we rate limit or batch pushes?
                         return $http.post(url, doc).then(function(response) {
                             if (response.data && response.data.id) {
                                 doc.id = response.data.id;

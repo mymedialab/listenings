@@ -7,7 +7,7 @@
  * # ApplicationCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('NewListeningCtrl', function ($log, $scope, $location, ngToast, listeningModel, areaService, questionSets, CurrentQuestionSetService) {
+angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope, $location, ngToast, listeningModel, areaService, questionSets, CurrentQuestionSetService) {
     var ridiculousPlaceholders = ['Evergreen Terrace, Springfield', 'Diagon Alley, London', 'Baker Street, Marylebone', 'Albert Square, Walford', 'Rainey Street, Arlen'];
     var rand = Math.floor(Math.random() * (ridiculousPlaceholders.length));
 
