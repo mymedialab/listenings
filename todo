@@ -1,8 +1,15 @@
 MY TODOS:
 
+Refresh areas
+View users.
+Sortable table for listenings.
+Admin should be able to view all.
+
+
 1. Can I make this less confusing? Reconcile list / get / sync functions?
 2. Make at least 1 and 2 from sprint 2 work?
 3. I used pouchDB because if that one guy using it in that one demo, but without a pouchdb backend, most of it is cruft. CAn we find something better?
+4. Road tags seems broken?
 
 SPRINT THE SECOND:
 
