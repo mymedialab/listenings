@@ -426,13 +426,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.dist %>',
           dest: 'release/public_html',
-          src: ['*.{ico,png,txt}',
-            '.htaccess',
-            '*.html',
-            '*.php',
-            'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*']
+          src: ['.htaccess', '**/*']
         },{
           expand: true,
           cwd: 'php',
