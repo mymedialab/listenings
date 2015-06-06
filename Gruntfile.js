@@ -420,7 +420,27 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      staging: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          dest: 'release/public_html',
+          src: ['*.{ico,png,txt}',
+            '.htaccess',
+            '*.html',
+            '*.php',
+            'views/{,*/}*.html',
+            'images/{,*/}*.{webp}',
+            'fonts/*']
+        },{
+          expand: true,
+          cwd: 'php',
+          dest: 'release/php',
+          src: '*'
+        }]
       }
+
     },
 
     // Run some tasks in parallel to speed up the build process
@@ -462,7 +482,7 @@ module.exports = function (grunt) {
 
     buildcontrol: {
       options: {
-        dir: 'dist',
+        dir: 'release',
         commit: true,
         push: true,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
@@ -537,10 +557,12 @@ module.exports = function (grunt) {
     'build'
   ]);
 
+
   grunt.registerTask('deploy-staging', [
     'newer:jshint',
     'test',
     'build',
+    'copy:staging',
     'buildcontrol:staging'
   ]);
 };
