@@ -1,11 +1,9 @@
 MY TODOS:
 
-Sortable table for listenings.
+Tags taggable
+Sortable table for listenings?
 
-
-1. Can I make this less confusing? Reconcile list / get / sync functions?
 2. Make at least 1 and 2 from sprint 2 work?
-3. I used pouchDB because if that one guy using it in that one demo, but without a pouchdb backend, most of it is cruft. CAn we find something better?
 4. Road tags seems broken?
 
 SPRINT THE SECOND:
@@ -20,23 +18,10 @@ SPRINT THE SECOND:
 
 1. Capture personal information into its own table and link to interview
 3. Stats page, select area, road (or all) and tags (or all?) with some options an that. Display chart (chart.js?) make it look gud.
-
------ cap here after 4 days!
-
 4. User roles (view only, record and review, review with personal details, admin)
 5. Annotate completed interviews. Text field for general input and an extra tag field for follow-up.
-
-PREVIOUSLY:
-
-For fetches, setup a short timeout. (For put's  / post's just let it keep trying)
-Nav menu as per easterschool
-Change password / recover password
-Also; add people as another (searchable, linked) entity.
+6. Change / recover password
 
 WTF Per Minute Reduction Strategies:
 
 * It's hard to discern the data structures in place, maybe a separation of concerns issue or better docs in the models would sort it out? Not sure how to go about this in Angular properly.
-
-* The services should probably be separated into models backed by actual services, mostly because the promises and things from the database make for very hard-to-read code and often quite convoluted app flow, it would be nice to be able to abtract some of that away (same for http requests)
-
-* Schemaless migrations are surprisingly hard to keep track of so it's quite hard to cover all the cases where a device may be sat there with unsynced data already which should work correctly with the new version despite it's quite large architecture changes. Remote logging should help us identify these occurrances now, but it'd be better to account for them ahead of time.

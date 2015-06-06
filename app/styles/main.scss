@@ -3,6 +3,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
+[ng-click] {
+  /* Links without href's aren't pointers. Boo. This fixes it up. */
+  cursor: pointer;
+}
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;

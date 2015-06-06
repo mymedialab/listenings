@@ -190,7 +190,7 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
 
         self.store = function (details) {
             /* _id is the local pouchDb identifier, and id is the canonical MySQL identifier. We may not be able to get that for a while, so it is pending. */
-            details._id = details._id || Session.user.id + '/' + dateUtc();
+            details._id = details._id || Session.user.id + '-' + dateUtc();
             details.id = details.id || 'pending';
             details.last_updated = new Date().getTime();
             dirty = true;
