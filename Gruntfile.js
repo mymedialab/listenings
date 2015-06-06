@@ -423,11 +423,21 @@ module.exports = function (grunt) {
       },
       staging: {
         files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
           dest: 'release/public_html',
-          src: ['<%= yeoman.dist %>']
+          src: ['*.{ico,png,txt}',
+            '.htaccess',
+            '*.html',
+            '*.php',
+            'views/{,*/}*.html',
+            'images/{,*/}*.{webp}',
+            'fonts/*']
         },{
+          expand: true,
+          cwd: 'php',
           dest: 'release/php',
-          src: 'php'
+          src: '**/*'
         }]
       }
 
