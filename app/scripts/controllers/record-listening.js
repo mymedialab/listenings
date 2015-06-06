@@ -11,6 +11,12 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
     var cloneObj = function(obj) {
         return (obj) ? JSON.parse(JSON.stringify(obj)) : null;
     };
+
+    if (!CurrentQuestionSetService.selectedSet) {
+        $location.path('/listening/new');
+        return;
+    }
+
     $scope.loading = true;
     $scope.answers = {
         type : 'interview',
@@ -42,7 +48,7 @@ angular.module('listeningsApp').controller('RecordListeningCtrl', function ($sco
         listeningModel.sync();
     };
 
-    questionSets.getQuestions(CurrentQuestionSetService.selectedSet.name).then(function(res) {
+    questionSets.getQuestions(CurrentQuestionSetService.selectedSet._id).then(function(res) {
         var reformattedQuestions = [];
         var questionnaire = cloneObj(res);
 

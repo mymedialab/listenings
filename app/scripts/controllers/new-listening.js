@@ -44,8 +44,6 @@ angular.module('listeningsApp').controller('NewListeningCtrl', function ($scope,
     };
 
     $scope.createNew = function(area, location, houseno, selectedSet) {
-        console.log('createnew:', [area, location, houseno, selectedSet]);
-
         location = (typeof(location) === 'string') ? location : location[0].text;
         area     = (typeof(area) === 'string') ? area : area.name;
 
