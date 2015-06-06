@@ -7,10 +7,11 @@
  * # ListListeningsCtrl
  * Controller of the listeningsApp
  */
-angular.module('listeningsApp').controller('ShowQuestionnaireCtrl', function($scope, $http, $routeParams, $location, questionSets, ngToast) {
+angular.module('listeningsApp').controller('ShowQuestionnaireCtrl', function($scope, $http, $routeParams, $location, $filter, questionSets, ngToast) {
+    var questionnaireId = $filter('unslugify')($routeParams.questionnaire_id);
     $scope.loading = true;
 
-    questionSets.getQuestions($routeParams.questionnaire_id).then(function(doc) {
+    questionSets.getQuestions(questionnaireId).then(function(doc) {
         $scope.questionnaire = doc;
         $scope.loading       = false;
 

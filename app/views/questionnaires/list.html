@@ -28,7 +28,7 @@
                 <td>{{ questionnaire.questions.length }}</td>
                 <td>{{ questionnaire.taggable.length }}</td>
                 <td>
-                    <a class="btn btn-default btn-xs" ng-href="/#/questionnaire/show/{{questionnaire._id}}">edit</a>
+                    <a class="btn btn-default btn-xs" ng-href="/#/questionnaire/show/{{questionnaire._id | slugify}}">edit</a>
                 </td>
             </tr>
         </tbody>
