@@ -15,7 +15,7 @@ angular.module('listeningsApp').controller('AreaCtrl', function ($scope, areaSer
     }
 
     $scope.newArea = '';
-    $scope.areas = [{name: "loading..."}];
+    $scope.areas = [{name: 'loading...'}];
     refreshAreas();
 
     $scope.addNew = function(name) {

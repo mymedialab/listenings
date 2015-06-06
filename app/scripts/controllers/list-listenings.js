@@ -84,7 +84,7 @@ angular.module('listeningsApp').controller('ListListeningCtrl', function ($scope
 
         listeningModel.sync().then(function() {
             $scope.syncing = false;
-        }).catch(function(err) {
+        }).catch(function() {
             ngToast.create({
               content: 'Failed to sync all records',
               className: 'danger'

@@ -25,7 +25,7 @@ angular.module('listeningsApp').service('questionSets', function(syncedModel) {
                 };
             }
         });
-    };
+    }
 
     /**
      * Handles either update or create.
@@ -36,7 +36,7 @@ angular.module('listeningsApp').service('questionSets', function(syncedModel) {
         details.taggable = tranformTaggables(details.taggable);
 
         return model.store(details);
-    };
+    }
 
     /**
      * @deprecated Use getAll instead

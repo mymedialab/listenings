@@ -1,7 +1,4 @@
 'use strict';
-
-/*global $:true, navigator:true, document:true */
-
 /**
  * @ngdoc overview
  * @name listeningsApp

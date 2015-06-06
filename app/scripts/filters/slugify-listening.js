@@ -5,6 +5,6 @@ angular.module('listeningsApp').filter('slugify', function() {
     if (!str || typeof(str) !== 'string') {
       return str;
     }
-    return window.btoa(unescape(encodeURIComponent( str )));
-  }
+    return window.btoa(window.unescape(encodeURIComponent( str )));
+  };
 });

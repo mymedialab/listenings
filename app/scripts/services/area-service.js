@@ -11,7 +11,7 @@ angular.module('listeningsApp').service('areaService', function(syncedModel) {
 
     function store(area) {
         if (!area.name) {
-            throw "Could not create new area, missing name.";
+            throw 'Could not create new area, missing name.';
         }
         area.locations = area.locations || [];
 
