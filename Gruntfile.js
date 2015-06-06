@@ -469,7 +469,7 @@ module.exports = function (grunt) {
       },
       staging: {
         options: {
-          remote: 'origin',
+          remote: 'git@bitbucket.org:bjrhodes/listenings.git',
           branch: 'staging'
         }
       }
