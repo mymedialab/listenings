@@ -458,6 +458,21 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    buildcontrol: {
+      options: {
+        dir: 'dist',
+        commit: true,
+        push: true,
+        message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+      },
+      staging: {
+        options: {
+          remote: 'origin',
+          branch: 'staging'
+        }
+      }
     }
   });
 
@@ -520,5 +535,12 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('deploy-staging', [
+    'newer:jshint',
+    'test',
+    'build',
+    'buildcontrol:staging'
   ]);
 };
