@@ -42,6 +42,7 @@ class QuestionnaireController extends Controller {
 			return Response::json([ 'errors' => $v->errors() ], 400);
 		}
 
+		DB::beginTransaction();
 		$questionnaire = Questionnaire::create([ 'name' => Input::get('name') ]);
 
 		if (Input::has('questions')) {
@@ -62,7 +63,10 @@ class QuestionnaireController extends Controller {
 
 		$questionnaire->push();
 
-		return Response::json($this->reformatTagsAndQuestions($questionnaire), 201);
+		$response = $this->reformatTagsAndQuestions($questionnaire);
+		DB::commit();
+
+		return Response::json($response, 201);
 	}
 
 	/**
@@ -130,6 +134,10 @@ class QuestionnaireController extends Controller {
 	protected function reformatTagsAndQuestions($Questionnaire)
 	{
 		$questionnaire = $Questionnaire->toArray();
+		if (!isset($questoinaire['tag_lists']) || !isset($questoinaire['questions'])) {
+			$Questionnaire->load('tagLists', 'tagLists.tags', 'questions');
+			$questionnaire = $Questionnaire->toArray();
+		}
 
 		$questionnaire['taggable'] = array_map(function($tagList) {
 			return [

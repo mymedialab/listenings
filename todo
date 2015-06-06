@@ -6,6 +6,11 @@ Sortable table for listenings?
 2. Make at least 1 and 2 from sprint 2 work?
 4. Road tags seems broken?
 
+Found (and mostly fixed) a bug, if the PHP controller stores a questionairre but doesn't return correctly, JS will try to
+re-store and get a duplicate which errors constantly. We can check the returned error to see if it is a collision, and
+if it is, smart de-dupe manually in the JS. ALSO, check this same behaviour across other models! I "fixed" it in PHP
+with DB transactions. Item only stored when the response is prepped.
+
 SPRINT THE SECOND:
 
 2. Add area field, change 'rough location' to 'road' and have roads belong to areas

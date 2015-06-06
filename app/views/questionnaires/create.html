@@ -11,7 +11,7 @@
         <input type="text" class="form-control" ng-model="listening.name">
     </div>
 
-    <form ng-submit="listening.questions.push(question);question=''" class="row">
+    <form ng-submit="addTo('questions', question);question='';" class="row">
         <div class="form-group">
 
             <div class="col-md-12">
@@ -32,7 +32,7 @@
         </div>
     </form>
 
-    <form ng-submit="listening.taggable.push(taggable);taggable=''" class="row">
+    <form ng-submit="addTo('taggable', taggable);taggable='';" class="row">
         <div class="form-group">
 
             <div class="col-md-12">
