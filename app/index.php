@@ -4,9 +4,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 date_default_timezone_set('UTC');
 
-$phpDirectory = __DIR__ . "/../php/bootstrap";
+$phpDirectory = realpath(__DIR__ . "/../php/bootstrap");
 if (!is_dir($phpDirectory)) {
-    $phpDirectory = __DIR__ . "/../bootstrap";
+    $phpDirectory = realpath(__DIR__ . "/../bootstrap");
 }
 if (!is_dir($phpDirectory)) {
     throw new Exception("Could not find autoloader", 1);
