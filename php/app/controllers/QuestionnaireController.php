@@ -76,8 +76,8 @@ class QuestionnaireController extends Controller {
 	{
 		$v = Validator::make(Input::all(), [
 			'name'      => 'required|string',
-			'questions' => 'required|array',
-			'taggable'  => 'required|array'
+			'questions' => 'array',
+			'taggable'  => 'array'
 		]);
 
 		if ($v->fails()) {
@@ -93,20 +93,23 @@ class QuestionnaireController extends Controller {
 		$questionIds = $questionnaire->questions->lists('id');
 		Question::destroy($questionIds);
 
-		foreach (Input::get('questions') as $question) {
-			Question::create(['question' => $question, 'questionnaire_id' => $questionnaire->id]);
+		if (Input::has('questions')) {
+			foreach (Input::get('questions') as $question) {
+				Question::create(['question' => $question, 'questionnaire_id' => $questionnaire->id]);
+			}
 		}
 
 		$tagListIds = $questionnaire->tagLists->lists('id');
 		$questionnaire->tagLists()->detach($tagListIds);
+		if (Input::has('taggable')) {
+			foreach (Input::get('taggable') as $tagList) {
+				$T = TagList::firstOrNew(['name' => $tagList['name']]);
 
-		foreach (Input::get('taggable') as $tagList) {
-			$T = TagList::firstOrNew(['name' => $tagList['name']]);
-
-			$questionnaire->tagLists()->save($T);
-			if (!$T->exists) {
-				// it's a new one!
-				$T->save();
+				$questionnaire->tagLists()->save($T);
+				if (!$T->exists) {
+					// it's a new one!
+					$T->save();
+				}
 			}
 		}
 
