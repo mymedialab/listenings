@@ -34,4 +34,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return !!((int) $value);
 	}
+
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
 }

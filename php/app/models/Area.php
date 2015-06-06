@@ -6,10 +6,18 @@
  */
 class Area extends \Eloquent
 {
-  protected $fillable = ['name'];
+    protected $fillable = ['name'];
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
 
-  public function locations()
-  {
-      return $this->hasMany('Location');
-  }
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
+    public function locations()
+    {
+        return $this->hasMany('Location');
+    }
 }

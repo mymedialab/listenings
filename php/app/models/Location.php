@@ -12,4 +12,14 @@ class Location extends \Eloquent
   {
       return $this->belongsTo('Area', 'area_id', 'id');
   }
+
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('c');
+    }
 }

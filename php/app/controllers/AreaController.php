@@ -79,7 +79,8 @@ class AreaController extends \Controller {
 		}
 
 		$V = Validator::make(Input::all(), [
-			'name' => 'required|string'
+			'name' => 'required|string',
+			'last_updated' => 'integer'
 		]);
 
 		if ($V->fails()) {
@@ -87,6 +88,11 @@ class AreaController extends \Controller {
 		}
 
 		$Area->name = Input::get('name');
+		if (Input::has('last_updated')) {
+			$Area->updated_at = new DateTime(date('c', round(Input::get('last_updated') / 1000)));
+		} else {
+			$Area->touch();
+		}
 		if ($Area->save()) {
 			return Response::json($Area->toArray(), 200);
 		}

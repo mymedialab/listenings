@@ -30,11 +30,13 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
     }
 
     function localModified(remote, local) {
-        var localLast = new Date(local.last_updated),
-            remoteLast = new Date(remote.last_updated);
+        var delta,
+            localLast = new Date(local.last_updated).getTime(),
+            remoteLast = new Date(remote.last_updated).getTime();
 
         if (!isNaN(localLast) && !isNaN(remoteLast)) {
-            return (localLast.getTime() > remoteLast.getTime()); // if equal, return false!
+            delta = localLast - remoteLast;
+            return (delta > 1000); // more than a second difference
         } else if (!isNaN(localLast)) {
             /* We don't know when the remote was last updated, so assume it's oldest. Local seems ok. */
             return true;
@@ -205,7 +207,13 @@ angular.module('listeningsApp').factory('syncedModel', function(pouchDB, Session
         };
 
         transformForServer = transformForServer || function(localRow) { return localRow; };
-        transformForLocal = transformForLocal || function(remoteRow) { return remoteRow; };
+        transformForLocal = transformForLocal || function(remoteRow) {
+            if (remoteRow.updated_at && !remoteRow.last_updated) {
+                /* Laravel convetional dates, not adjusted for JS. Fix here. */
+                remoteRow.last_updated = remoteRow.updated_at;
+            }
+            return remoteRow;
+        };
 
         // default to 10 seconds
         syncInterval = syncInterval || 10000;
