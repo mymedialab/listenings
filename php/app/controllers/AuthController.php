@@ -1,14 +1,14 @@
 <?php
 
-use \App;
-use \Auth;
-use \Config;
-use \Input;
-use \Response;
-use \Redirect;
-use \Validator;
-use \View;
-use \User;
+use \App as App;
+use \Auth as Auth;
+use \Config as Config;
+use \Input as Input;
+use \Response as Response;
+use \Redirect as Redirect;
+use \Validator as Validator;
+use \View as View;
+use \User as User;
 
 class AuthController extends Controller
 {

@@ -1,9 +1,9 @@
 <?php
 
-use \Config;
-use \DateTime;
-use \Instrument;
-use \User;
+use \Config as Config;
+use \DateTime as DateTime;
+use \Instrument as Instrument;
+use \User as User;
 
 class UserService
 {

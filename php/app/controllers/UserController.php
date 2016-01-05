@@ -1,12 +1,12 @@
 <?php
-use \App;
-use \Auth;
-use \DateTime;
-use \Hash;
-use \Input;
-use \Response;
-use \Validator;
-use \User;
+use \App as App;
+use \Auth as Auth;
+use \DateTime as DateTime;
+use \Hash as Hash;
+use \Input as Input;
+use \Response as Response;
+use \Validator as Validator;
+use \User as User;
 
 class UserController extends Controller
 {
