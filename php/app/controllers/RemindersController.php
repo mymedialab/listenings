@@ -1,10 +1,10 @@
 <?php
 
-use \Input;
-use \Hash;
-use \Lang;
-use \Password;
-use \Response;
+use \Input as Input;
+use \Hash as Hash;
+use \Lang as Lang;
+use \Password as Password;
+use \Response as Response;
 
 class RemindersController extends Controller
 {

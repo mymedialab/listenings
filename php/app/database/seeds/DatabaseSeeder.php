@@ -1,6 +1,6 @@
 <?php
 
-use Faker;
+use \Faker as Faker;
 
 class DatabaseSeeder extends Seeder {
 
@@ -14,6 +14,16 @@ class DatabaseSeeder extends Seeder {
 		Eloquent::unguard();
 
 		$faker = Faker\Factory::create();
+
+		$u = User::firstOrCreate([
+			'username' => 'admin',
+			'name'     => 'The Admin',
+			'email'    => 'admin@example.com',
+			'is_admin' => true
+		]);
+
+		$u->password = Hash::make('password');
+		$u->save();
 
 		$A = Area::firstOrCreate(['name' => 'Bodmin']);
 
